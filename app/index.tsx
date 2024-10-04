@@ -1,11 +1,9 @@
-import { View, Text } from "react-native";
+import HomePage from "@/modules/home/screens/HomePage";
 
-const Page = () => {
+const AppEntrypoint = () => {
     return (
-        <View>
-            <Text>Teste</Text>
-        </View>
+        <HomePage/>
     )
 }
 
-export default Page;
+export default AppEntrypoint;
