@@ -1,9 +1,9 @@
 import HomePage from "@/modules/home/screens/HomePage";
 
 const AppEntrypoint = () => {
-    return (
-        <HomePage/>
-    )
+  return (
+    <HomePage/>
+  )
 }
 
 export default AppEntrypoint;
