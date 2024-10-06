@@ -1,9 +1,13 @@
-import HomePage from "@/modules/home/screens/HomePage";
+import * as React from 'react';
+import { NavigationContainer } from "@react-navigation/native";
+import StackNavigator from './navigation/StackNavigator';
 
-const AppEntrypoint = () => {
+function AppEntrypoint() {
   return (
-    <HomePage/>
-  )
+    <NavigationContainer independent={true}>
+      <StackNavigator />
+    </NavigationContainer>
+  );
 }
 
 export default AppEntrypoint;
