@@ -12,9 +12,9 @@ export type StackParamScreensList = {
 
 function StackNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ statusBarColor: "#1A1A1A"}}>
       <Stack.Screen name="Home" component={HomePage} options={{headerShown: false}} />
-      <Stack.Screen name="Register" component={RegisterPage} />
+      <Stack.Screen name="Register" component={RegisterPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true}}/>
     </Stack.Navigator>
   );
 }

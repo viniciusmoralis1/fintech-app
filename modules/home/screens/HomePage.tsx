@@ -1,3 +1,4 @@
+import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    backgroundColor: "rgba(0, 0, 0, 0.58)",
     padding: 48
   },
   imageContainer: {
@@ -44,15 +45,16 @@ const styles = StyleSheet.create({
     padding: 32
   },
   title: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
     textTransform: "uppercase",
     textAlign: "center",
     color: "#FFF"
   },
   subtitle: {
-    fontSize: 24,
+    fontSize: 28,
     fontWeight: "bold",
+    textTransform: "uppercase",
     color: "#FFF"
   },
   registerButton: {
