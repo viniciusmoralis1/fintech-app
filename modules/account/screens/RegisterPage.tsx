@@ -1,42 +1,49 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 
 const RegisterPage = () => {
   const [countryCode, setCountryCode] = useState('+55');
   const [phoneNumber, setphoneNumber] = useState('');
+
+  const keyboardOffset = Platform.OS === "ios" ? 100 : 0;
 
   const onSignUp = async () => {
 
   }
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Let's get started!</Text>
-      <Text style={styles.description}>
-        Enter your phone number. We will send you a confirmation code there
-      </Text>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={[styles.numberInput, {width: 72}]}
-          placeholder="CC"
-          placeholderTextColor={"#AAA"}
-          keyboardType="numeric"
-          value={countryCode}
-          onChangeText={setCountryCode}
-        />
-        <TextInput
-          style={[styles.numberInput, {flex: 1}]}
-          placeholder="Mobile number"
-          placeholderTextColor={"#979797"}
-          keyboardType="numeric"
-          value={phoneNumber}
-          onChangeText={setphoneNumber}
-        />
+    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={keyboardOffset}>
+      <View style={styles.container}>
+        <Text style={styles.title}>Let's get started!</Text>
+        <Text style={styles.description}>
+          Enter your phone number. We will send you a confirmation code there
+        </Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={[styles.numberInput, {width: 72}]}
+            placeholder="CC"
+            placeholderTextColor={"#AAA"}
+            keyboardType="numeric"
+            value={countryCode}
+            onChangeText={setCountryCode}
+          />
+          <TextInput
+            style={[styles.numberInput, {flex: 1}]}
+            placeholder="Mobile number"
+            placeholderTextColor={"#979797"}
+            keyboardType="numeric"
+            value={phoneNumber}
+            onChangeText={setphoneNumber}
+          />
+        </View>
+        <TouchableOpacity>
+          <Text style={styles.linkText}>Already have an account? Log in</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.registerButton}>
+          <Text style={styles.registerText}>Register</Text>
+        </TouchableOpacity>
       </View>
-      <TouchableOpacity>
-        <Text style={styles.linkText}>Already have an account? Log in</Text>
-      </TouchableOpacity>
-    </View>
+    </KeyboardAvoidingView>  
   )
 }
 
@@ -70,6 +77,17 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     fontSize: 18,
     fontWeight: "500",
+  },
+  registerButton: {
+    width: 160,
+    height: 56,
+    color: "#1A9F59",
+    borderRadius: 16
+  },
+  registerText: {
+    color: "#FFF",
+    fontSize: 16,
+    fontWeight: "500"
   }
 })
 
