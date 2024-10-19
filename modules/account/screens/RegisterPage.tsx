@@ -1,9 +1,13 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { StackParamScreensList } from "@/app/navigation/StackNavigator";
 
 const RegisterPage = () => {
   const [countryCode, setCountryCode] = useState('+55');
   const [phoneNumber, setphoneNumber] = useState('');
+
+  const navigation = useNavigation<NavigationProp<StackParamScreensList>>();
 
   const keyboardOffset = Platform.OS === "ios" ? 100 : 0;
 
@@ -18,6 +22,7 @@ const RegisterPage = () => {
         <Text style={styles.description}>
           Enter your phone number. We will send you a confirmation code there
         </Text>
+
         <View style={styles.inputContainer}>
           <TextInput
             style={[styles.numberInput, {width: 72}]}
@@ -27,6 +32,7 @@ const RegisterPage = () => {
             value={countryCode}
             onChangeText={setCountryCode}
           />
+
           <TextInput
             style={[styles.numberInput, {flex: 1}]}
             placeholder="Mobile number"
@@ -36,12 +42,15 @@ const RegisterPage = () => {
             onChangeText={setphoneNumber}
           />
         </View>
-        <TouchableOpacity>
+
+        <TouchableOpacity onPress={() => { navigation.navigate("Login") }}>
           <Text style={styles.linkText}>Already have an account? Log in</Text>
         </TouchableOpacity>
+
         <TouchableOpacity style={styles.registerButton}>
           <Text style={styles.registerText}>Register</Text>
         </TouchableOpacity>
+
       </View>
     </KeyboardAvoidingView>  
   )
