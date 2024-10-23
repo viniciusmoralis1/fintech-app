@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const RegisterPage = () => {
   const [countryCode, setCountryCode] = useState('+55');
@@ -46,23 +47,27 @@ const RegisterPage = () => {
         <Text style={styles.linkText}>Don't have an account already? Register now</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.loginButton}>
+      <TouchableOpacity style={styles.loginButton} onPress={() => { navigation.navigate("Home") }}>
         <Text style={styles.registerText}>Continue</Text>
       </TouchableOpacity>
 
       <View style={{ flexDirection: "row", alignItems: "center", gap: 24 }}>
         <View style={{ flex: 1, height: 1, backgroundColor: "#666" }} />
-        <Text style={{ color: "#A6A6A6", fontSize: 12 }} >or</Text>
+        <Text style={{ color: "#A6A6A6", fontSize: 14 }} >or</Text>
         <View style={{ flex: 1, height: 1, backgroundColor: "#666" }} />
       </View>
 
-      <TouchableOpacity style={styles.emailButton}>
-        <Text>Continue with e-mail</Text>
-      </TouchableOpacity>
+      <View style={{ justifyContent: "center", alignItems: "center" }}>
+        <TouchableOpacity style={styles.emailButton}>
+          <Ionicons name="mail" size={22} backgroundColor="transparent" />
+          <Text>Continue with e-mail</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.googleButton}>
-        <Text>Continue with Google account</Text>
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.googleButton}>
+          <Ionicons name="logo-google" size={22} backgroundColor="transparent" />
+          <Text>Continue with Google account</Text>
+        </TouchableOpacity>
+      </View>
 
     </KeyboardAvoidingView>
   )
@@ -116,23 +121,25 @@ const styles = StyleSheet.create({
   },
   emailButton: {
     backgroundColor: "#FFF",
-    width: 160,
-    height: 56,
-    flexDirection: "row",
-    marginTop: 16,
-    borderRadius: 32,
-    alignContent: "center",
-    alignItems: "center",
-  },
-  googleButton: {
-    backgroundColor: "#FFF",
-    width: 260,
+    width: 300,
     height: 52,
     flexDirection: "row",
     marginTop: 16,
     borderRadius: 32,
-    alignContent: "center",
     alignItems: "center",
+    paddingLeft: 24,
+    gap: 32
+  },
+  googleButton: {
+    backgroundColor: "#FFF",
+    width: 300,
+    height: 52,
+    flexDirection: "row",
+    marginTop: 16,
+    borderRadius: 32,
+    alignItems: "center",
+    paddingLeft: 24,
+    gap: 32
   }
 })
 

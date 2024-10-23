@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import WelcomePage from "@/modules/home/screens/WelcomePage";
 import RegisterPage from '@/modules/account/screens/RegisterPage';
 import LoginPage from "@/modules/account/screens/LoginPage";
+import HomePage from '@/modules/home/screens/HomePage';
 
 const Stack = createNativeStackNavigator<StackParamScreensList>();
 
@@ -17,6 +18,7 @@ function StackNavigator() {
   return (
     <Stack.Navigator screenOptions={{ statusBarColor: "#1A1A1A"}}>
       <Stack.Screen name="Welcome" component={WelcomePage} options={{headerShown: false}} />
+      <Stack.Screen name="Home" component={HomePage} />
       <Stack.Screen name="Register" component={RegisterPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true}}/>
       <Stack.Screen name="Login" component={LoginPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true}}/>
     </Stack.Navigator>

@@ -46,7 +46,7 @@ const RegisterPage = () => {
         <Text style={styles.linkText}>Already have an account? Log in</Text>
       </TouchableOpacity>
 
-      <TouchableOpacity style={styles.registerButton}>
+      <TouchableOpacity style={styles.registerButton} onPress={() => { navigation.navigate("Home") }}>
         <Text style={styles.registerText}>Register</Text>
       </TouchableOpacity>
     </KeyboardAvoidingView>
