@@ -16,57 +16,55 @@ const RegisterPage = () => {
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={keyboardOffset}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Welcome back</Text>
-        <Text style={styles.description}>
-          Enter the phone number associated with your account.
-        </Text>
+    <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={keyboardOffset}>
+      <Text style={styles.title}>Welcome back</Text>
+      <Text style={styles.description}>
+        Enter the phone number associated with your account.
+      </Text>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={[styles.numberInput, {width: 72}]}
-            placeholder="CC"
-            placeholderTextColor={"#AAA"}
-            keyboardType="numeric"
-            value={countryCode}
-            onChangeText={setCountryCode}
-          />
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={[styles.numberInput, {width: 72}]}
+          placeholder="CC"
+          placeholderTextColor={"#AAA"}
+          keyboardType="numeric"
+          value={countryCode}
+          onChangeText={setCountryCode}
+        />
 
-          <TextInput
-            style={[styles.numberInput, {flex: 1}]}
-            placeholder="Mobile number"
-            placeholderTextColor={"#979797"}
-            keyboardType="numeric"
-            value={phoneNumber}
-            onChangeText={setphoneNumber}
-          />
-        </View>
-
-        <TouchableOpacity onPress={() => { navigation.navigate("Register") }}>
-          <Text style={styles.linkText}>Don't have an account already? Register now</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.loginButton}>
-          <Text style={styles.registerText}>Continue</Text>
-        </TouchableOpacity>
-
-        <View style={{ flexDirection: "row", alignItems: "center", gap: 24 }}>
-          <View style={{ flex: 1, height: .5, backgroundColor: "#F1F1F1" }} />
-          <Text style={{ color: "#A6A6A6", fontSize: 12 }} >or</Text>
-          <View style={{ flex: 1, height: .5, backgroundColor: "#F1F1F1" }} />
-        </View>
-
-        <TouchableOpacity style={styles.emailButton}>
-          <Text>Continue with e-mail</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.googleButton}>
-          <Text>Continue with Google account</Text>
-        </TouchableOpacity>
-
+        <TextInput
+          style={[styles.numberInput, {flex: 1}]}
+          placeholder="Mobile number"
+          placeholderTextColor={"#979797"}
+          keyboardType="numeric"
+          value={phoneNumber}
+          onChangeText={setphoneNumber}
+        />
       </View>
-    </KeyboardAvoidingView>  
+
+      <TouchableOpacity onPress={() => { navigation.navigate("Register") }}>
+        <Text style={styles.linkText}>Don't have an account already? Register now</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.loginButton}>
+        <Text style={styles.registerText}>Continue</Text>
+      </TouchableOpacity>
+
+      <View style={{ flexDirection: "row", alignItems: "center", gap: 24 }}>
+        <View style={{ flex: 1, height: 1, backgroundColor: "#666" }} />
+        <Text style={{ color: "#A6A6A6", fontSize: 12 }} >or</Text>
+        <View style={{ flex: 1, height: 1, backgroundColor: "#666" }} />
+      </View>
+
+      <TouchableOpacity style={styles.emailButton}>
+        <Text>Continue with e-mail</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.googleButton}>
+        <Text>Continue with Google account</Text>
+      </TouchableOpacity>
+
+    </KeyboardAvoidingView>
   )
 }
 
@@ -91,7 +89,7 @@ const styles = StyleSheet.create({
     marginTop: 12
   },
   linkText: {
-    color: "#5218AF",
+    color: "#22A8AF",
     fontWeight: "500"
   },
   numberInput: {
@@ -102,10 +100,14 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   loginButton: {
-    width: 160,
-    height: 56,
-    color: "#1A9F59",
-    borderRadius: 16
+    width: 260,
+    height: 52,
+    backgroundColor: "#1A9F59",
+    borderRadius: 56,
+    marginVertical:40,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center"
   },
   registerText: {
     color: "#FFF",
@@ -117,14 +119,20 @@ const styles = StyleSheet.create({
     width: 160,
     height: 56,
     flexDirection: "row",
-    marginTop: 16, 
+    marginTop: 16,
+    borderRadius: 32,
+    alignContent: "center",
+    alignItems: "center",
   },
   googleButton: {
     backgroundColor: "#FFF",
-    width: 160,
-    height: 56,
+    width: 260,
+    height: 52,
     flexDirection: "row",
-    marginTop: 16, 
+    marginTop: 16,
+    borderRadius: 32,
+    alignContent: "center",
+    alignItems: "center",
   }
 })
 

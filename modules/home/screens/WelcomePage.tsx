@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from "react
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
 
-const HomePage = () => {
+const WelcomePage = () => {
   const navigation = useNavigation<NavigationProp<StackParamScreensList>>();
 
   return (
@@ -15,7 +15,7 @@ const HomePage = () => {
           <TouchableOpacity style={styles.registerButton} onPress={() => { navigation.navigate("Register") }}>
             <Text style={styles.registerText}>Register</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.loginButton}>
+          <TouchableOpacity style={styles.loginButton} onPress={() => { navigation.navigate("Login") }}>
             <Text style={styles.loginText}>Login</Text>
           </TouchableOpacity>
         </View>
@@ -86,4 +86,4 @@ const styles = StyleSheet.create({
   }  
 })
 
-export default HomePage;
+export default WelcomePage;

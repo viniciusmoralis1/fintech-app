@@ -16,43 +16,40 @@ const RegisterPage = () => {
   }
 
   return (
-    <KeyboardAvoidingView behavior="padding" keyboardVerticalOffset={keyboardOffset}>
-      <View style={styles.container}>
-        <Text style={styles.title}>Let's get started!</Text>
-        <Text style={styles.description}>
-          Enter your phone number. We will send you a confirmation code there
-        </Text>
+    <KeyboardAvoidingView style={styles.container} behavior="padding" keyboardVerticalOffset={keyboardOffset}>
+      <Text style={styles.title}>Let's get started!</Text>
+      <Text style={styles.description}>
+        Enter your phone number. We will send you a confirmation code there
+      </Text>
 
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={[styles.numberInput, {width: 72}]}
-            placeholder="CC"
-            placeholderTextColor={"#AAA"}
-            keyboardType="numeric"
-            value={countryCode}
-            onChangeText={setCountryCode}
-          />
+      <View style={styles.inputContainer}>
+        <TextInput
+          style={[styles.numberInput, {width: 72}]}
+          placeholder="CC"
+          placeholderTextColor={"#AAA"}
+          keyboardType="numeric"
+          value={countryCode}
+          onChangeText={setCountryCode}
+        />
 
-          <TextInput
-            style={[styles.numberInput, {flex: 1}]}
-            placeholder="Mobile number"
-            placeholderTextColor={"#979797"}
-            keyboardType="numeric"
-            value={phoneNumber}
-            onChangeText={setphoneNumber}
-          />
-        </View>
-
-        <TouchableOpacity onPress={() => { navigation.navigate("Login") }}>
-          <Text style={styles.linkText}>Already have an account? Log in</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.registerButton}>
-          <Text style={styles.registerText}>Register</Text>
-        </TouchableOpacity>
-
+        <TextInput
+          style={[styles.numberInput, {flex: 1}]}
+          placeholder="Mobile number"
+          placeholderTextColor={"#979797"}
+          keyboardType="numeric"
+          value={phoneNumber}
+          onChangeText={setphoneNumber}
+        />
       </View>
-    </KeyboardAvoidingView>  
+
+      <TouchableOpacity onPress={() => { navigation.navigate("Login") }}>
+        <Text style={styles.linkText}>Already have an account? Log in</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.registerButton}>
+        <Text style={styles.registerText}>Register</Text>
+      </TouchableOpacity>
+    </KeyboardAvoidingView>
   )
 }
 
@@ -77,7 +74,7 @@ const styles = StyleSheet.create({
     marginTop: 12
   },
   linkText: {
-    color: "#5218AF",
+    color: "#22A8AF",
     fontWeight: "500"
   },
   numberInput: {
@@ -88,10 +85,14 @@ const styles = StyleSheet.create({
     fontWeight: "500",
   },
   registerButton: {
-    width: 160,
-    height: 56,
-    color: "#1A9F59",
-    borderRadius: 16
+    width: 260,
+    height: 52,
+    backgroundColor: "#1A9F59",
+    borderRadius: 56,
+    marginVertical:40,
+    justifyContent: "center",
+    alignItems: "center",
+    alignSelf: "center"
   },
   registerText: {
     color: "#FFF",
