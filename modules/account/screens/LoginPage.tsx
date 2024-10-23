@@ -52,9 +52,9 @@ const RegisterPage = () => {
       </TouchableOpacity>
 
       <View style={{ flexDirection: "row", alignItems: "center", gap: 24 }}>
-        <View style={{ flex: 1, height: 1, backgroundColor: "#666" }} />
+        <View style={{ flex: 1, height: .8, backgroundColor: "#CCC" }} />
         <Text style={{ color: "#A6A6A6", fontSize: 14 }} >or</Text>
-        <View style={{ flex: 1, height: 1, backgroundColor: "#666" }} />
+        <View style={{ flex: 1, height: .8, backgroundColor: "#CCC" }} />
       </View>
 
       <View style={{ justifyContent: "center", alignItems: "center" }}>
