@@ -38,8 +38,7 @@ const HomePage = () => {
     icon: "image",
     text: "Background",
     onPressAction: onAddMoney()
-  },
-  ]
+  }]
 
   return (
     <ScrollView>
@@ -49,9 +48,15 @@ const HomePage = () => {
       </View>
 
       <FlatList
-        style={styles.actionRow}
         data={optionsList}
-        renderItem={(data) => <RoundButton list={true} icon={data.item.icon} text={data.item.text} onPressAction={() => {data.item.onPressAction}} />}
+        renderItem={(data) => 
+          <RoundButton
+            list={true}
+            icon={data.item.icon}
+            text={data.item.text}
+            onPressAction={() => {data.item.onPressAction}}
+          />
+        }
         horizontal
         showsHorizontalScrollIndicator={false}
       />
@@ -74,9 +79,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "500",
     marginRight: 8
-  },
-  actionRow: {
-    margin: 16
   },
 })
 

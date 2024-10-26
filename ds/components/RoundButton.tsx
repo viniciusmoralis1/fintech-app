@@ -10,7 +10,7 @@ export type RoundButtonProps = {
 
 export const RoundButton = ({text, icon, onPressAction, list}: RoundButtonProps) => {
   return (
-    <TouchableOpacity style={[styles.buttonContainer, list ? {marginRight: 10} : {}]} onPress={onPressAction}>
+    <TouchableOpacity style={[styles.buttonContainer, list ? { marginLeft: 6, marginRight: 4 } : {}]} onPress={onPressAction}>
       <View style={styles.iconCircleContainer}>
         <Ionicons name={icon} size={32} />
       </View>
