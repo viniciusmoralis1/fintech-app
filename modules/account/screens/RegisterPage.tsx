@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingView, Platform } from "react-native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
+import Colors from "@/ds/styles/Colors";
 
 const RegisterPage = () => {
   const [countryCode, setCountryCode] = useState('+55');
@@ -74,11 +75,11 @@ const styles = StyleSheet.create({
     marginTop: 12
   },
   linkText: {
-    color: "#22A8AF",
+    color: Colors.secondary,
     fontWeight: "500"
   },
   numberInput: {
-    backgroundColor: "#BBB",
+    backgroundColor: Colors.lightGray,
     padding: 16,
     borderRadius: 16,
     fontSize: 18,
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
   registerButton: {
     width: 260,
     height: 52,
-    backgroundColor: "#1A9F59",
+    backgroundColor: Colors.primary,
     borderRadius: 56,
     marginVertical:40,
     justifyContent: "center",
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   registerText: {
-    color: "#FFF",
+    color: Colors.white,
     fontSize: 16,
     fontWeight: "500"
   }

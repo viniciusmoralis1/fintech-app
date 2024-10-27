@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, TextInput, TouchableOpacity, KeyboardAvoidingVi
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Colors from "@/ds/styles/Colors";
 
 const RegisterPage = () => {
   const [countryCode, setCountryCode] = useState('+55');
@@ -94,11 +95,11 @@ const styles = StyleSheet.create({
     marginTop: 12
   },
   linkText: {
-    color: "#22A8AF",
+    color: Colors.secondary,
     fontWeight: "500"
   },
   numberInput: {
-    backgroundColor: "#BBB",
+    backgroundColor: Colors.lightGray,
     padding: 16,
     borderRadius: 16,
     fontSize: 18,
@@ -107,7 +108,7 @@ const styles = StyleSheet.create({
   loginButton: {
     width: 260,
     height: 52,
-    backgroundColor: "#1A9F59",
+    backgroundColor: Colors.primary,
     borderRadius: 56,
     marginVertical:40,
     justifyContent: "center",
@@ -115,12 +116,12 @@ const styles = StyleSheet.create({
     alignSelf: "center"
   },
   registerText: {
-    color: "#FFF",
+    color: Colors.white,
     fontSize: 16,
     fontWeight: "500"
   },
   emailButton: {
-    backgroundColor: "#FFF",
+    backgroundColor: Colors.white,
     width: 300,
     height: 52,
     flexDirection: "row",
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
     gap: 32
   },
   googleButton: {
-    backgroundColor: "#FFF",
+    backgroundColor: Colors.white,
     width: 300,
     height: 52,
     flexDirection: "row",

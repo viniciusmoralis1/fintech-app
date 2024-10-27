@@ -16,16 +16,16 @@ export interface BalanceState {
   clearTransactions: () => void;
 }
 
-export const useBalacenStore = create<BalanceState>()(
+export const useBalanceStore = create<BalanceState>()(
   persist((set, get) => ({
     transactions: [],
     runTransaction: (transaction: Transaction) => {
-      set({ transactions: [ ...get().transactions, transaction ]})
+      set((state) => ({ transactions: [ ...state.transactions, transaction ]}))
     },
-    balance: () => 0,
+    balance: () => get().transactions.reduce((oldValue, tra) => oldValue + tra.amount, 0),
     clearTransactions: () => { set({ transactions: [] }) }
   }), {
     name: 'balance',
-    getStorage: createJSONStorage(() => zustandStorage),
+    storage: createJSONStorage(() => zustandStorage),
   })
 )

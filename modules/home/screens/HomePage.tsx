@@ -1,65 +1,82 @@
 import * as React from "react";
-import { View, ScrollView, StyleSheet, Text, Button, FlatList } from "react-native";
+import { View, ScrollView, StyleSheet, Text, FlatList } from "react-native";
 import { RoundButton } from "@/ds/components";
+import { useBalanceStore } from "@/store/balanceStore";
 
 const HomePage = () => {
-  const balance = 2581;
+  const { balance, runTransaction, transactions, clearTransactions } = useBalanceStore();
 
   const onAddMoney = () => {
+    runTransaction({
+      id: Math.random().toString(),
+      amount: 100,
+      date: new Date(),
+      title: "Adding money",
+    });
+  };
 
+  const clearHistory = () => {
+    clearTransactions()
   }
 
   const optionsList = [{
     icon: "add",
     text: "Add money",
-    onPressAction: onAddMoney()
+    onPressAction: onAddMoney
   },
   {
     icon: "refresh",
     text: "Exchange",
-    onPressAction: onAddMoney()
+    onPressAction: clearHistory
   },
   {
     icon: "list",
     text: "Details",
-    onPressAction: onAddMoney()
+    onPressAction: () => {}
   },
   {
     icon: "stats-chart-outline",
     text: "Statement",
-    onPressAction: onAddMoney()
+    onPressAction: () => {}
   },
   {
     icon: "cash-outline",
     text: "Converter",
-    onPressAction: onAddMoney()
+    onPressAction: () => {}
   },
   {
     icon: "image",
     text: "Background",
-    onPressAction: onAddMoney()
+    onPressAction: () => {}
   }]
 
   return (
     <ScrollView>
       <View style={styles.accountContainer}>
         <Text style={styles.currency}>$</Text>
-        <Text style={styles.balance}>{balance}</Text>
+        <Text style={styles.balance}>{balance()}</Text>
       </View>
 
       <FlatList
         data={optionsList}
-        renderItem={(data) => 
+        renderItem={(data) =>
           <RoundButton
             list={true}
             icon={data.item.icon}
             text={data.item.text}
-            onPressAction={() => {data.item.onPressAction}}
+            onPressAction={() => {data.item.onPressAction()}}
           />
         }
         horizontal
         showsHorizontalScrollIndicator={false}
       />
+
+      <Text style={styles.sectionHeader}>Transactions</Text>
+      <View>
+        { transactions.length === 0 && (
+          <Text>No transactions</Text>
+        )}
+      </View>
     </ScrollView>
   )
 };
@@ -80,6 +97,12 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     marginRight: 8
   },
+  sectionHeader: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    margin: 20,
+    marginBottom: 10,
+  }
 })
 
 export default HomePage;

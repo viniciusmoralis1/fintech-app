@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Colors from "@/ds/styles/Colors";
 
 export type RoundButtonProps = {
   text: string;
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
     width: 64,
     height: 64,
     borderRadius: 50,
-    backgroundColor: "#ddd",
+    backgroundColor: Colors.lightGray,
     justifyContent: "center",
     alignItems: "center"
   },
