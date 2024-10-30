@@ -2,6 +2,8 @@ import * as React from "react";
 import { View, ScrollView, StyleSheet, Text, FlatList } from "react-native";
 import { RoundButton } from "@/ds/components";
 import { useBalanceStore } from "@/store/balanceStore";
+import Colors from "@/ds/styles/Colors";
+import Ionicons from "@expo/vector-icons/Ionicons";
 
 const HomePage = () => {
   const { balance, runTransaction, transactions, clearTransactions } = useBalanceStore();
@@ -72,10 +74,24 @@ const HomePage = () => {
       />
 
       <Text style={styles.sectionHeader}>Transactions</Text>
-      <View>
-        { transactions.length === 0 && (
-          <Text>No transactions</Text>
-        )}
+      <View style={styles.transactions}>
+        <View>
+          { transactions.length === 0 && (
+            <Text style={styles.noTransactionsText}>Nothing to show yet</Text>
+          )}
+          { transactions.reverse().map((transaction) => (
+            <View key={transaction.id} style={{ flexDirection: "row", alignItems: "center", gap: 20, marginVertical: 8 }}>
+              <View style={styles.circle}>
+                <Ionicons name={transaction.amount > 0 ? "add" : "remove"} size={24} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontWeight: "500" }}>{transaction.title}</Text>
+                <Text style={{ color: Colors.gray, fontSize: 12 }}>{transaction.date.toLocaleString()}</Text>
+              </View>
+              <Text style={{ fontSize: 16 }}>${transaction.amount}</Text>
+            </View>
+          ))}
+        </View>
       </View>
     </ScrollView>
   )
@@ -94,14 +110,35 @@ const styles = StyleSheet.create({
   },
   currency: {
     fontSize: 24,
-    fontWeight: "500",
+    fontWeight: "600",
     marginRight: 8
   },
   sectionHeader: {
     fontSize: 20,
-    fontWeight: 'bold',
+    fontWeight: "600",
     margin: 20,
     marginBottom: 10,
+  },
+  transactions: {
+    marginHorizontal: 20,
+    marginVertical: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: Colors.white,
+    borderRadius: 16,
+    gap: 20
+  },
+  noTransactionsText: {
+    fontWeight: "500",
+    color: "#555",
+  },
+  circle: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: Colors.lightGray,
+    justifyContent: "center",
+    alignItems: "center",
   }
 })
 
