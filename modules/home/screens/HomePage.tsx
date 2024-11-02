@@ -1,5 +1,6 @@
 import * as React from "react";
 import { View, ScrollView, StyleSheet, Text, FlatList } from "react-native";
+import { useHeaderHeight } from "@react-navigation/elements"
 import { RoundButton } from "@/ds/components";
 import { useBalanceStore } from "@/store/balanceStore";
 import Colors from "@/ds/styles/Colors";
@@ -7,6 +8,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 
 const HomePage = () => {
   const { balance, runTransaction, transactions, clearTransactions } = useBalanceStore();
+  const headerHeight = useHeaderHeight();
 
   const onAddMoney = () => {
     runTransaction({
@@ -53,7 +55,7 @@ const HomePage = () => {
   }]
 
   return (
-    <ScrollView>
+    <ScrollView contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: 40 }}>
       <View style={styles.accountContainer}>
         <Text style={styles.currency}>$</Text>
         <Text style={styles.balance}>{balance()}</Text>
@@ -73,25 +75,23 @@ const HomePage = () => {
         showsHorizontalScrollIndicator={false}
       />
 
-      <Text style={styles.sectionHeader}>Transactions</Text>
-      <View style={styles.transactions}>
-        <View>
-          { transactions.length === 0 && (
-            <Text style={styles.noTransactionsText}>Nothing to show yet</Text>
-          )}
-          { transactions.reverse().map((transaction) => (
-            <View key={transaction.id} style={{ flexDirection: "row", alignItems: "center", gap: 20, marginVertical: 8 }}>
-              <View style={styles.circle}>
-                <Ionicons name={transaction.amount > 0 ? "add" : "remove"} size={24} />
-              </View>
-              <View style={{ flex: 1 }}>
-                <Text style={{ fontWeight: "500" }}>{transaction.title}</Text>
-                <Text style={{ color: Colors.gray, fontSize: 12 }}>{transaction.date.toLocaleString()}</Text>
-              </View>
-              <Text style={{ fontSize: 16 }}>${transaction.amount}</Text>
+      <Text style={styles.transactionSectionHeader}>Transactions</Text>
+      <View style={styles.transactionSection}>
+        { transactions.length === 0 && (
+          <Text style={styles.noTransactionsText}>Nothing to show yet</Text>
+        )}
+        { transactions.reverse().map((transaction) => (
+          <View key={transaction.id} style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
+            <View style={styles.circle}>
+              <Ionicons name={transaction.amount > 0 ? "add" : "remove"} size={24} />
             </View>
-          ))}
-        </View>
+            <View style={{ flex: 1 }}>
+              <Text style={{ fontWeight: "500" }}>{transaction.title}</Text>
+              <Text style={{ color: Colors.gray, fontSize: 12 }}>{transaction.date.toLocaleString()}</Text>
+            </View>
+            <Text style={{ fontSize: 16 }}>${transaction.amount}</Text>
+          </View>
+        ))}
       </View>
     </ScrollView>
   )
@@ -113,20 +113,19 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginRight: 8
   },
-  sectionHeader: {
+  transactionSectionHeader: {
     fontSize: 20,
     fontWeight: "600",
     margin: 20,
     marginBottom: 10,
   },
-  transactions: {
+  transactionSection: {
+    gap: 20,
     marginHorizontal: 20,
-    marginVertical: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+    padding: 16,
     backgroundColor: Colors.white,
     borderRadius: 16,
-    gap: 20
+    justifyContent: "space-evenly",
   },
   noTransactionsText: {
     fontWeight: "500",

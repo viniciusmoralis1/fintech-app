@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "space-between",
     alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.58)",
+    backgroundColor: "rgba(0, 0, 0, 0.65)",
     padding: 48
   },
   imageContainer: {
