@@ -3,12 +3,17 @@ import { View, ScrollView, StyleSheet, Text, FlatList } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements"
 import { RoundButton } from "@/ds/components";
 import { useBalanceStore } from "@/store/balanceStore";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { StackParamScreensList } from "@/app/navigation/StackNavigator";
 import Colors from "@/ds/styles/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
 const HomePage = () => {
   const { balance, runTransaction, transactions, clearTransactions } = useBalanceStore();
+  const navigation = useNavigation<NavigationProp<StackParamScreensList>>();
+
   const headerHeight = useHeaderHeight();
+
 
   const onAddMoney = () => {
     runTransaction({
@@ -21,6 +26,10 @@ const HomePage = () => {
 
   const clearHistory = () => {
     clearTransactions()
+  }
+
+  const navigateToCrypto = () => {
+    navigation.navigate("Crypto");
   }
 
   const optionsList = [{
@@ -36,7 +45,7 @@ const HomePage = () => {
   {
     icon: "list",
     text: "Details",
-    onPressAction: () => {}
+    onPressAction: navigateToCrypto
   },
   {
     icon: "stats-chart-outline",

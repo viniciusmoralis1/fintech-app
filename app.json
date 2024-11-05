@@ -25,11 +25,13 @@
     },
     "web": {
       "bundler": "metro",
-      "output": "static",
+      "output": "server",
       "favicon": "./ds/assets/images/favicon.png"
     },
     "plugins": [
-      "expo-router",
+      ["expo-router", {
+        "origin": "https://evanbacon.dev/"
+      }],
       "expo-asset"
     ],
     "experiments": {

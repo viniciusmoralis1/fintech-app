@@ -5,6 +5,7 @@ import RegisterPage from '@/modules/account/screens/RegisterPage';
 import LoginPage from "@/modules/account/screens/LoginPage";
 import HomePage from '@/modules/home/screens/HomePage';
 import { CustomHeader } from "@/ds/components"
+import CryptoPage from '@/modules/crypto/screens/CryptoPage';
 
 const Stack = createNativeStackNavigator<StackParamScreensList>();
 
@@ -13,6 +14,7 @@ export type StackParamScreensList = {
   Welcome: undefined;
   Register: undefined;
   Login: undefined;
+  Crypto: undefined;
 }
 
 function StackNavigator() {
@@ -29,6 +31,7 @@ function StackNavigator() {
       />
       <Stack.Screen name="Register" component={RegisterPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true}}/>
       <Stack.Screen name="Login" component={LoginPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true}}/>
+      <Stack.Screen name="Crypto" component={CryptoPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true}}/>
     </Stack.Navigator>
   );
 }
