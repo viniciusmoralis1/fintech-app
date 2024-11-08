@@ -2,7 +2,7 @@ const API_KEY = process.env.CRYPTO_API;
 
 export async function GET(request: Request) {
   const response = await fetch(
-    `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=15`,
+    `https://pro-api.coinmarketcap.com/v1/cryptocurrency/listings/latest?limit=20`,
     {
       headers: {
         'X-CMC_PRO_API_KEY': `${API_KEY}`,

@@ -14,7 +14,6 @@ const HomePage = () => {
 
   const headerHeight = useHeaderHeight();
 
-
   const onAddMoney = () => {
     runTransaction({
       id: Math.random().toString(),
@@ -29,7 +28,7 @@ const HomePage = () => {
   }
 
   const navigateToCrypto = () => {
-    navigation.navigate("Crypto");
+    navigation.navigate("CryptoList");
   }
 
   const optionsList = [{
