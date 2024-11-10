@@ -15,9 +15,9 @@ const CryptoListPage = () => {
 
   const handleScroll = (event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y;
-    if (offsetY > 30 && !scrolled) {
+    if (offsetY > 40 && !scrolled) {
       setScrolled(true);
-    } else if (offsetY <= 30 && scrolled) {
+    } else if (offsetY <= 40 && scrolled) {
       setScrolled(false);
     }
   };
@@ -49,7 +49,7 @@ const CryptoListPage = () => {
     )
   } else {
     return (
-      <ScrollView style={[styles.container, { marginTop: headerHeight }]} onScroll={handleScroll}>
+      <ScrollView style={[styles.container, { paddingTop: 16 }]} onScroll={handleScroll}>
         <Text style={styles.cryptoSectionHeader}>Trending Cryptos</Text>
         <View style={styles.cryptoList}>
         {currencies.data?.map((currency: Currency) => (
@@ -59,7 +59,7 @@ const CryptoListPage = () => {
             onPress={() => { navigation.navigate("CryptoDetail", { currencyId: currency.id }) }}
           >
             <View style={{flexDirection: "row", gap: 12, alignItems: "center"}} >
-              <Image source={{ uri: info.data?.[currency.id]?.logo }} style={{ width: 34, height: 34 }} />
+              <Image source={{ uri: info?.data?.[currency.id]?.logo ?? '' }} style={{ width: 34, height: 34 }} />
               <View style={{ gap: 2 }}>
                 <Text style={styles.cryptoName}>{currency.name}</Text>
                 <Text style={styles.cryptoSymbol} >{currency.symbol}</Text>

@@ -33,8 +33,8 @@ function StackNavigator() {
       />
       <Stack.Screen name="Register" component={RegisterPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true}}/>
       <Stack.Screen name="Login" component={LoginPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true}}/>
-      <Stack.Screen name="CryptoList" component={CryptoListPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true, headerLargeTitle: true}}/>
-      <Stack.Screen name="CryptoDetail" component={CryptoDetailsPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true, headerLargeTitle: true}}/>
+      <Stack.Screen name="CryptoList" component={CryptoListPage} options={{headerTitle: '', headerShadowVisible: false, headerLargeTitle: true}}/>
+      <Stack.Screen name="CryptoDetail" component={CryptoDetailsPage} options={{headerTitle: '', headerShadowVisible: false, headerLargeTitle: true}}/>
     </Stack.Navigator>
   );
 }
