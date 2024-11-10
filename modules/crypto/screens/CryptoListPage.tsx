@@ -59,7 +59,7 @@ const CryptoListPage = () => {
             onPress={() => { navigation.navigate("CryptoDetail", { currencyId: currency.id }) }}
           >
             <View style={{flexDirection: "row", gap: 12, alignItems: "center"}} >
-              <Image source={{ uri: info?.data?.[currency.id]?.logo ?? '' }} style={{ width: 34, height: 34 }} />
+              <Image source={{ uri: info?.data?.[currency.id]?.logo }} style={{ width: 34, height: 34 }} />
               <View style={{ gap: 2 }}>
                 <Text style={styles.cryptoName}>{currency.name}</Text>
                 <Text style={styles.cryptoSymbol} >{currency.symbol}</Text>

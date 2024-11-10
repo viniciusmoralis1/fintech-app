@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, SectionList, Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { CartesianChart, Line } from "victory-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { RouteProp } from "@react-navigation/native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
@@ -12,7 +13,7 @@ type CryptoDetailPageProps = {
   route: CryptoDetailRouteProps;
 }
 
-const CryptoDetailsPage: React.FC<CryptoDetailPageProps> = ({route}) => {
+const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
   const headerHeight = useHeaderHeight();
   const [scrolled, setScrolled] = useState(false);
   const [ activeIndex, setActiveIndex ] = useState(0);
@@ -27,6 +28,13 @@ const CryptoDetailsPage: React.FC<CryptoDetailPageProps> = ({route}) => {
       return info[+currencyId]
     }
   });
+
+  const tickers = useQuery({
+    queryKey: ['tickers'],
+    queryFn: async (): Promise<any[]> => await fetch(`/api/tickers?symbol=${crypto.data?.symbol}&name=${crypto.data?.name}`).then(res => res.json())
+  });
+
+  console.log(tickers.data)
 
   const handleScroll = (event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y;
@@ -43,11 +51,11 @@ const CryptoDetailsPage: React.FC<CryptoDetailPageProps> = ({route}) => {
     });
   }, [scrolled, navigation]);
 
-
   return (
-    <ScrollView style={{ paddingVertical: 16, paddingHorizontal: 12 }} onScroll={handleScroll}>
       <SectionList
         keyExtractor={(data) => data.title}
+        style={{ paddingVertical: 16, paddingHorizontal: 12 }}
+        onScroll={handleScroll}
         sections={[{ data: [{ title: "Chart" }] }]}
         renderSectionHeader={() => (
           <ScrollView
@@ -88,12 +96,29 @@ const CryptoDetailsPage: React.FC<CryptoDetailPageProps> = ({route}) => {
               <Text style={styles.title}>{crypto.data?.name}</Text>
               <Text style={styles.subtitle} >{crypto.data?.symbol}</Text>
             </View>
-            <Image source={{ uri: crypto?.data?.logo ?? '' }} style={{width: 60, height: 60}} />
+            <Image source={{ uri: crypto?.data?.logo }} style={{width: 60, height: 60}} />
           </View>
         )}
         renderItem={() => (
           <>
-            <View style={{height: 800, backgroundColor: Colors.primary}}></View>
+            {/* {tickers.data && (
+              // <View>
+              //   <Text>{tickers.data[0]?.price}</Text>
+              // </View>
+                <CartesianChart
+                  data={tickers.data}
+                  xKey="timestamp"
+                  yKeys={["price"]}
+                >
+                  {({ points }) => (
+                    <>
+                      {points.price && (
+                        <Line points={points.price} color={Colors.primary} strokeWidth={3} />
+                      )}
+                    </>
+                  )}
+                </CartesianChart>
+              )} */}
             <View style={styles.descriptionBlock}>
               <Text style={styles.subtitle}>Overview</Text>
               <Text style={{color: Colors.gray}}>{crypto.data?.description}</Text>
@@ -103,7 +128,6 @@ const CryptoDetailsPage: React.FC<CryptoDetailPageProps> = ({route}) => {
       
       >
       </SectionList>
-    </ScrollView>
   )
 }
 
@@ -149,4 +173,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CryptoDetailsPage;
+export default CryptoDetailPage;
