@@ -7,7 +7,6 @@ import HomePage from '@/modules/home/screens/HomePage';
 import { CustomHeader } from "@/ds/components"
 import CryptoListPage from '@/modules/crypto/screens/CryptoListPage';
 import CryptoDetailsPage from '@/modules/crypto/screens/CryptoDetailsPage';
-import { Currency } from '@/modules/crypto/interface/cryptoInterface';
 
 const Stack = createNativeStackNavigator<StackParamScreensList>();
 
@@ -17,7 +16,7 @@ export type StackParamScreensList = {
   Register: undefined;
   Login: undefined;
   CryptoList: undefined;
-  CryptoDetail: { currency: Currency };
+  CryptoDetail: { currencyId: number };
 }
 
 function StackNavigator() {
@@ -34,8 +33,8 @@ function StackNavigator() {
       />
       <Stack.Screen name="Register" component={RegisterPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true}}/>
       <Stack.Screen name="Login" component={LoginPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true}}/>
-      <Stack.Screen name="CryptoList" component={CryptoListPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true}}/>
-      <Stack.Screen name="CryptoDetail" component={CryptoDetailsPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true}}/>
+      <Stack.Screen name="CryptoList" component={CryptoListPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true, headerLargeTitle: true}}/>
+      <Stack.Screen name="CryptoDetail" component={CryptoDetailsPage} options={{headerTitle: '', headerShadowVisible: false, headerTransparent: true, headerLargeTitle: true}}/>
     </Stack.Navigator>
   );
 }
