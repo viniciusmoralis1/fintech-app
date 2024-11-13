@@ -7,6 +7,7 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
 import Colors from "@/ds/styles/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import Mastercard from "@/ds/assets/svg/MastercardIcon";
 
 const HomePage = () => {
   const { balance, runTransaction, transactions, clearTransactions } = useBalanceStore();
@@ -17,7 +18,7 @@ const HomePage = () => {
   const onAddMoney = () => {
     runTransaction({
       id: Math.random().toString(),
-      amount: 100,
+      amount: Math.floor((Math.random() * 100000))/100,
       date: new Date(),
       title: "Adding money",
     });
@@ -64,9 +65,25 @@ const HomePage = () => {
 
   return (
     <ScrollView contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: 40 }}>
-      <View style={styles.accountContainer}>
-        <Text style={styles.currency}>$</Text>
-        <Text style={styles.balance}>{balance()}</Text>
+      <View style={{ flexDirection: "row", flex: 1, margin: 32, gap: 12 }}>
+        <View style={styles.accountContainer}>
+          <Text style={{ color: Colors.white, marginBottom: 16 }}>MAIN BALANCE</Text>
+          <View style={styles.balanceContainer}>
+            <Text style={styles.currency}>$</Text>
+            <Text style={styles.balance}>{balance().valueOf() === 0  ? balance() : balance().toFixed(2)}</Text>
+          </View>
+          <Text style={{ color: Colors.white, marginTop: 12, backgroundColor: Colors.primaryMuted, borderRadius: 30, padding: 4}} >+ 2,3%</Text>
+        </View>
+      <View>
+        <View style={styles.mainCardContainer}>
+          <Text style={{ color: "#FFF", marginBottom: 16 }}>MAIN CARD</Text>
+          <View style={styles.balanceContainer}>
+            <Text style={{ color: Colors.primary, fontSize: 24, fontWeight: "bold" }}>** 5910</Text>
+          </View>
+          <Mastercard />
+        </View>
+      </View>
+
       </View>
 
       <FlatList
@@ -97,7 +114,7 @@ const HomePage = () => {
               <Text style={{ fontWeight: "500" }}>{transaction.title}</Text>
               <Text style={{ color: Colors.gray, fontSize: 12 }}>{transaction.date.toLocaleString()}</Text>
             </View>
-            <Text style={{ fontSize: 16 }}>${transaction.amount}</Text>
+            <Text style={{ fontSize: 16 }}>$ {transaction.amount}</Text>
           </View>
         ))}
       </View>
@@ -107,19 +124,38 @@ const HomePage = () => {
 
 const styles = StyleSheet.create({
   accountContainer: {
-    margin: 80,
-    alignItems: "center",
+    width: 160,
+    height: 200,
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    backgroundColor: Colors.primary,
+    borderRadius: 16,
+  },
+  mainCardContainer: {
+    width: 160,
+    height: 200,
+    padding: 20,
+    justifyContent: "center",
+    alignItems: "flex-start",
+    backgroundColor: Colors.tertiary,
+    borderRadius: 16,
+  },
+  balanceContainer: {
     flexDirection: "row",
+    alignItems: "center",
     justifyContent: "center"
   },
   balance: {
-    fontSize: 44,
-    fontWeight: "bold"
+    fontSize: 24,
+    fontWeight: "bold",
+    color: Colors.white
   },
   currency: {
-    fontSize: 24,
+    fontSize: 22,
     fontWeight: "600",
-    marginRight: 8
+    marginRight: 8,
+    color: Colors.white
   },
   transactionSectionHeader: {
     fontSize: 20,

@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   cryptoList: {
-    gap: 8,
+    gap: 12,
     marginHorizontal: 8,
     padding: 16,
     backgroundColor: Colors.white,
@@ -111,10 +111,9 @@ const styles = StyleSheet.create({
   },
   cryptoItem: {
     flexDirection: "row",
-    gap: 12,
-    paddingVertical: 6,
-    borderBottomWidth: .5,
-    borderColor: "#BBB",
+    paddingVertical: 8,
+    borderBottomWidth: .2,
+    borderColor: "#DDD",
     alignItems: "center",
     justifyContent: "space-between"
   },

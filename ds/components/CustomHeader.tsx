@@ -1,17 +1,21 @@
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import { BlurView } from "expo-blur";
-import Colors from "../styles/Colors";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { NavigationProp, useNavigation } from "@react-navigation/native";
+import { StackParamScreensList } from "@/app/navigation/StackNavigator";
+import Colors from "../styles/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
+
 
 export const CustomHeader: React.FC = () => {
   const { top } = useSafeAreaInsets();
+  const navigation = useNavigation<NavigationProp<StackParamScreensList>>();
 
   return (
     <BlurView intensity={100} tint="extraLight" style={{paddingTop: top}} >
       <View style={styles.container}>
-        <TouchableOpacity style={styles.roundButton}>
+        <TouchableOpacity style={styles.accountButton} onPress={() => navigation.navigate("Account")}>
           <Text style={{ color: Colors.white, fontWeight: "500", fontSize: 16 }}>VM</Text>
         </TouchableOpacity>
 
@@ -42,7 +46,7 @@ const styles = StyleSheet.create({
     gap: 8,
     paddingHorizontal: 16
   },
-  roundButton: {
+  accountButton: {
     width: 36,
     height: 36,
     borderRadius: 20,

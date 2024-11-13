@@ -2,6 +2,7 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ImageBackground } from "react-native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
+import Colors from "@/ds/styles/Colors";
 
 const WelcomePage = () => {
   const navigation = useNavigation<NavigationProp<StackParamScreensList>>();
@@ -47,14 +48,12 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "bold",
-    textTransform: "uppercase",
     textAlign: "center",
     color: "#FFF"
   },
   subtitle: {
     fontSize: 28,
     fontWeight: "bold",
-    textTransform: "uppercase",
     color: "#FFF"
   },
   registerButton: {
@@ -63,7 +62,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 48,
     width: 104,
-    backgroundColor: "#1A9F59"
+    backgroundColor: Colors.primary
   },
   registerText:{
     color: "#FFF",
@@ -76,11 +75,11 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     height: 48,
     width: 104,
-    borderColor: "#1ADF59",
+    borderColor: Colors.primary,
     borderWidth: 2.5
   },
   loginText:{
-    color: "#1ADF59",
+    color: Colors.primary,
     fontSize: 16,
     fontWeight: "500"
   }  
