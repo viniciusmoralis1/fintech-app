@@ -6,6 +6,9 @@ node_modules/
 #VSCode Config
 .vscode/
 
+#ENV
+.env
+
 # Expo
 .expo/
 dist/
