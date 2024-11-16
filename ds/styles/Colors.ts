@@ -5,8 +5,9 @@ export default {
   tertiary: "#BDECB6",
   background: '#F5F5F5',
   dark: '#141518',
-  gray: "#495359",
-  lightGray: '#D8DCE9',
+  lightGray: '#DADFEA',
+  gray: "#BBB",
+  darkGray: "#495359",
   white: "#FCFCFC"
 };
 
