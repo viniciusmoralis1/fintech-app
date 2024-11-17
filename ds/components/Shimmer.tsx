@@ -10,19 +10,19 @@ export interface ShimmerProps {
   width: number;
   height: number;
   centered?: boolean;
-  borderRadius?: number;
+  circle?: boolean;
 }
 
 export const Shimmer: React.FC<ShimmerProps> = (props) => {
-  const trX = useSharedValue(0);
+  const progressAnimationX = useSharedValue(0);
 
   useEffect(() => {
-    trX.value = withRepeat(withTiming(1, { duration: 2000 }), -1); //-1 to indicate infinite
+    progressAnimationX.value = withRepeat(withTiming(1, { duration: 2000 }), -1); //-1 to indicate infinite
   }, []);
 
-  const rStyle = useAnimatedStyle(() => ({
+  const animation = useAnimatedStyle(() => ({
     transform: [
-      { translateX: interpolate(trX.value, [0, 1], [ -props.width, props.width ])}
+      { translateX: interpolate(progressAnimationX.value, [0, 1], [ -props.width, props.width ])}
     ]
   }));
 
@@ -35,12 +35,12 @@ export const Shimmer: React.FC<ShimmerProps> = (props) => {
         style={[styles.box, {
           width: props.width,
           height: props.height,
-          borderRadius: props.borderRadius ? props.borderRadius : 8 }]
+          borderRadius: props.circle ? (props.width + props.height)/2 : 8 }]
         }
       >
         <AnimatedLinearGradient 
           colors={["transparent", Colors.lightGray, "transparent"]}
-          style={[ {...StyleSheet.absoluteFillObject}, rStyle ]}
+          style={[ {...StyleSheet.absoluteFillObject}, animation ]}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 0 }}
         />

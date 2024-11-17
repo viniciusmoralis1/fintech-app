@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
 import { useQuery } from "@tanstack/react-query";
-import { useHeaderHeight } from "@react-navigation/elements"
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
 import Colors from "@/ds/styles/Colors";
 import { Currency } from "../interface/cryptoInterface";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { CryptoItemSkeleton } from "../components/CryptoItemSkeleton";
 
 const CryptoListPage = () => {
-  const headerHeight = useHeaderHeight();
   const [scrolled, setScrolled] = useState(false);
   const navigation = useNavigation<NavigationProp<StackParamScreensList>>();
 
@@ -36,30 +35,36 @@ const CryptoListPage = () => {
   const ids = currencies.data?.map((currency: Currency) => currency.id).join(',');
 
   const info = useQuery({
-    queryKey: ['info'],
+    queryKey: ['info', ids],
     queryFn: () => fetch(`/api/info?ids=${ids}`).then(res => res.json()),
     enabled: !!ids
   });
 
-  if (currencies.isLoading || info.isLoading) {
-    return (
-      <View>
-        <Text>Shimmer will be here</Text>
-      </View>
-    )
-  } else {
-    return (
-      <ScrollView style={[styles.container, { paddingTop: 16 }]} onScroll={handleScroll}>
-        <Text style={styles.cryptoSectionHeader}>Trending Cryptos</Text>
-        <View style={styles.cryptoList}>
-        {currencies.data?.map((currency: Currency) => (
+  return (
+    <ScrollView style={[styles.container, { paddingTop: 16 }]} onScroll={handleScroll}>
+      <Text style={styles.cryptoSectionHeader}>Trending Cryptos</Text>
+      <View style={styles.cryptoList}>
+
+      { (currencies.isLoading || info.isLoading) ? (
+        <>
+          <CryptoItemSkeleton />
+          <CryptoItemSkeleton />
+          <CryptoItemSkeleton />
+          <CryptoItemSkeleton />
+          <CryptoItemSkeleton />
+          <CryptoItemSkeleton />
+          <CryptoItemSkeleton />
+          <CryptoItemSkeleton />
+        </>
+       ) : (
+        currencies.data?.map((currency: Currency) => (
           <TouchableOpacity 
             style={styles.cryptoItem}
             key={ currency.id }
             onPress={() => { navigation.navigate("CryptoDetail", { currencyId: currency.id }) }}
           >
             <View style={{flexDirection: "row", gap: 12, alignItems: "center"}} >
-              <Image source={{ uri: info?.data?.[currency.id]?.logo }} style={{ width: 34, height: 34 }} />
+              <Image source={{ uri: info?.data?.[currency.id]?.logo }} style={{ width: 36, height: 36 }} />
               <View style={{ gap: 2 }}>
                 <Text style={styles.cryptoName}>{currency.name}</Text>
                 <Text style={styles.cryptoSymbol} >{currency.symbol}</Text>
@@ -79,11 +84,11 @@ const CryptoListPage = () => {
               </View>
             </View>
           </TouchableOpacity>
-        ))}
-        </View>
-      </ScrollView>
-    )
-  }
+        ))
+       )}
+      </View>
+    </ScrollView>
+  )
 }
 
 const styles = StyleSheet.create({
@@ -120,7 +125,7 @@ const styles = StyleSheet.create({
   cryptoName: {
     fontSize: 16,
     fontWeight: "500",
-    color: Colors.dark 
+    color: Colors.dark
   },
   cryptoSymbol: {
     color: Colors.gray
