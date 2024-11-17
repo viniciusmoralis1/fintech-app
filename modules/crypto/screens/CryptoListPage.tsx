@@ -41,17 +41,22 @@ const CryptoListPage = () => {
     enabled: !!ids
   });
 
-  function validatePriceDecimalPlaces(price: number){
+  function formatPrice(price: number){
     let decimalPlaces = 2;
 
-    while (decimalPlaces < 8) {
+    const formatter = new Intl.NumberFormat('en-US', {
+      minimumFractionDigits: 2,
+      maximumFractionDigits: 8
+    });
+
+    while (decimalPlaces < 9) {
       const roundedNumber = Number(price.toFixed(decimalPlaces));
       if (roundedNumber > 0){
-        return roundedNumber.toFixed(decimalPlaces);
+        return formatter.format(Number(roundedNumber.toFixed((decimalPlaces + 3))));
       }
       decimalPlaces++
     }
-    return price;
+    return price.toFixed(decimalPlaces);
   }
 
   return (
@@ -85,7 +90,7 @@ const CryptoListPage = () => {
               </View>
             </View>
             <View style={{ gap: 4, alignItems: "flex-end" }} >
-              <Text style={{ fontWeight: "500" }} >$ {validatePriceDecimalPlaces(currency.quote.USD.price)}</Text>
+              <Text style={{ fontWeight: "500" }} >$ {formatPrice(currency.quote.USD.price)}</Text>
               <View style={{ flexDirection: "row", gap: 2 }} >
                 <Ionicons
                   name={currency.quote.USD.percent_change_1h > 0 ? "caret-up" : "caret-down"}
