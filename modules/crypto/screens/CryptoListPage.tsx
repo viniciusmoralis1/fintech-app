@@ -7,6 +7,7 @@ import Colors from "@/ds/styles/Colors";
 import { Currency } from "../interface/cryptoInterface";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { CryptoItemSkeleton } from "../components/CryptoItemSkeleton";
+import { RoundedRect } from "@shopify/react-native-skia";
 
 const CryptoListPage = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -40,6 +41,19 @@ const CryptoListPage = () => {
     enabled: !!ids
   });
 
+  function validatePriceDecimalPlaces(price: number){
+    let decimalPlaces = 2;
+
+    while (decimalPlaces < 8) {
+      const roundedNumber = Number(price.toFixed(decimalPlaces));
+      if (roundedNumber > 0){
+        return roundedNumber.toFixed(decimalPlaces);
+      }
+      decimalPlaces++
+    }
+    return price;
+  }
+
   return (
     <ScrollView style={[styles.container, { paddingTop: 16 }]} onScroll={handleScroll}>
       <Text style={styles.cryptoSectionHeader}>Trending Cryptos</Text>
@@ -71,7 +85,7 @@ const CryptoListPage = () => {
               </View>
             </View>
             <View style={{ gap: 4, alignItems: "flex-end" }} >
-              <Text style={{ fontWeight: "500" }} >$ {currency.quote.USD.price.toFixed(2)}</Text>
+              <Text style={{ fontWeight: "500" }} >$ {validatePriceDecimalPlaces(currency.quote.USD.price)}</Text>
               <View style={{ flexDirection: "row", gap: 2 }} >
                 <Ionicons
                   name={currency.quote.USD.percent_change_1h > 0 ? "caret-up" : "caret-down"}

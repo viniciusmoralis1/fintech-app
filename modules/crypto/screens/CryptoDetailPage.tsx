@@ -14,7 +14,6 @@ type CryptoDetailPageProps = {
 }
 
 const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
-  const headerHeight = useHeaderHeight();
   const [scrolled, setScrolled] = useState(false);
   const [ activeIndex, setActiveIndex ] = useState(0);
   const navigation = useNavigation<NavigationProp<StackParamScreensList>>();  
@@ -22,10 +21,10 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
   const categories = ['Overview', 'News', 'Orders', 'Transactions'];
 
   const crypto = useQuery({
-    queryKey: ['info'],
+    queryKey: ['info', currencyId],
     queryFn: async () => {
       const info = await fetch(`/api/info?ids=${currencyId}`).then(res => res.json());
-      return info[+currencyId]
+      return info[+currencyId];
     }
   });
 
