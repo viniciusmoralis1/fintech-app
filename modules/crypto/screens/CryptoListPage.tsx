@@ -7,7 +7,6 @@ import Colors from "@/ds/styles/Colors";
 import { Currency } from "../interface/cryptoInterface";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { CryptoItemSkeleton } from "../components/CryptoItemSkeleton";
-import { RoundedRect } from "@shopify/react-native-skia";
 
 const CryptoListPage = () => {
   const [scrolled, setScrolled] = useState(false);

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, SectionList, Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
 import { CartesianChart, Line } from "victory-native";
-import { useHeaderHeight } from "@react-navigation/elements";
 import { RouteProp } from "@react-navigation/native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
@@ -29,7 +28,7 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
   });
 
   const tickers = useQuery({
-    queryKey: ['tickers'],
+    queryKey: ['tickers', crypto.data?.id],
     queryFn: async (): Promise<any[]> => await fetch(`/api/tickers?symbol=${crypto.data?.symbol}&name=${crypto.data?.name}`).then(res => res.json())
   });
 
@@ -51,56 +50,61 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
   }, [scrolled, navigation]);
 
   return (
+    <>
+    { (crypto.isLoading || tickers.isLoading) ? (
+      <View></View>
+    ) : (
       <SectionList
-        keyExtractor={(data) => data.title}
-        style={{ paddingVertical: 16, paddingHorizontal: 12 }}
-        onScroll={handleScroll}
-        sections={[{ data: [{ title: "Chart" }] }]}
-        renderSectionHeader={() => (
-          <ScrollView
-            contentContainerStyle={{
-              alignItems: "center",
-              justifyContent: "space-between",
-              flex: 1,
-              paddingVertical: 8,
-              paddingHorizontal: 12,
-              backgroundColor: Colors.background,
-              borderBottomColor: Colors.lightGray,
-              borderBottomWidth: 0.5
-            }}
-            horizontal={true}
-            showsHorizontalScrollIndicator={false}
-          >
-            {categories.map((item, index) => (
-              <TouchableOpacity
-                key={index}
-                style={ activeIndex === index ? styles.categoriesBtnActive : styles.categoriesBtn}
-                onPress={() => setActiveIndex(index)}
-              >
-                <Text style={ activeIndex === index ? styles.categoryTextActive : styles.categoryText}>{item}</Text>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
-        )}
-        ListHeaderComponent={() => (
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginHorizontal: 16
-            }}
-          >
-            <View style={{flexDirection: "column", marginBottom: 12}}>
-              <Text style={styles.title}>{crypto.data?.name}</Text>
-              <Text style={styles.subtitle} >{crypto.data?.symbol}</Text>
-            </View>
-            <Image source={{ uri: crypto?.data?.logo }} style={{width: 60, height: 60}} />
+      keyExtractor={(data) => data.title}
+      style={{ paddingVertical: 16, paddingHorizontal: 12 }}
+      onScroll={handleScroll}
+      sections={[{ data: [{ title: "Chart" }] }]}
+      renderSectionHeader={() => (
+        <ScrollView
+          contentContainerStyle={{
+            alignItems: "center",
+            justifyContent: "space-between",
+            flex: 1,
+            paddingVertical: 8,
+            paddingHorizontal: 12,
+            backgroundColor: Colors.background,
+            borderBottomColor: Colors.lightGray,
+            borderBottomWidth: 0.5
+          }}
+          horizontal={true}
+          showsHorizontalScrollIndicator={false}
+        >
+          {categories.map((item, index) => (
+            <TouchableOpacity
+              key={index}
+              style={ activeIndex === index ? styles.categoriesBtnActive : styles.categoriesBtn}
+              onPress={() => setActiveIndex(index)}
+            >
+              <Text style={ activeIndex === index ? styles.categoryTextActive : styles.categoryText}>{item}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      )}
+      ListHeaderComponent={() => (
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            marginHorizontal: 16
+          }}
+        >
+          <View style={{flexDirection: "column", marginBottom: 12}}>
+            <Text style={styles.title}>{crypto.data?.name}</Text>
+            <Text style={styles.subtitle} >{crypto.data?.symbol}</Text>
           </View>
-        )}
-        renderItem={() => (
-          <>
-            {/* {tickers.data && (
+          <Image source={{ uri: crypto?.data?.logo }} style={{width: 60, height: 60}} />
+        </View>
+      )}
+      renderItem={() => (
+        <>
+          <View style={{ height: 400, paddingHorizontal: 12 }} >
+            {tickers?.data && (
               // <View>
               //   <Text>{tickers.data[0]?.price}</Text>
               // </View>
@@ -112,21 +116,25 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
                   {({ points }) => (
                     <>
                       {points.price && (
-                        <Line points={points.price} color={Colors.primary} strokeWidth={3} />
+                        <Line points={points.price} color={Colors.primaryMuted} strokeWidth={3} />
                       )}
                     </>
                   )}
                 </CartesianChart>
-              )} */}
-            <View style={styles.descriptionBlock}>
-              <Text style={styles.subtitle}>Overview</Text>
-              <Text style={{color: Colors.gray}}>{crypto.data?.description}</Text>
-            </View>
-          </>
-        )} 
-      
-      >
-      </SectionList>
+              )}
+          </View>
+          <View style={styles.descriptionBlock}>
+            <Text style={styles.subtitle}>Overview</Text>
+            <Text style={{color: Colors.gray}}>{crypto.data?.description}</Text>
+          </View>
+        </>
+      )} 
+    
+    >
+    </SectionList>
+    ) }
+    </>
+    
   )
 }
 
