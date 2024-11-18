@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, SectionList, Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
-import { CartesianChart, Line } from "victory-native";
 import { RouteProp } from "@react-navigation/native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
 import { useQuery } from "@tanstack/react-query";
 import Colors from "@/ds/styles/Colors";
+import { CartesianChart, Line } from "victory-native";
+import { FontWeight, useFont } from "@shopify/react-native-skia";
 
 type CryptoDetailRouteProps = RouteProp<StackParamScreensList, 'CryptoDetail'>;
 type CryptoDetailPageProps = {
@@ -18,6 +19,7 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
   const navigation = useNavigation<NavigationProp<StackParamScreensList>>();  
   const { currencyId } = route.params;
   const categories = ['Overview', 'News', 'Orders', 'Transactions'];
+  const font = useFont(require('@/ds/assets/fonts/SpaceMono-Regular.ttf'), 14);
 
   const crypto = useQuery({
     queryKey: ['info', currencyId],
@@ -56,7 +58,7 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
     ) : (
       <SectionList
       keyExtractor={(data) => data.title}
-      style={{ paddingVertical: 16, paddingHorizontal: 12 }}
+      style={{ paddingHorizontal: 12, marginTop: 12 }}
       onScroll={handleScroll}
       sections={[{ data: [{ title: "Chart" }] }]}
       renderSectionHeader={() => (
@@ -105,22 +107,29 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
         <>
           <View style={{ height: 400, paddingHorizontal: 12 }} >
             {tickers?.data && (
-              // <View>
-              //   <Text>{tickers.data[0]?.price}</Text>
-              // </View>
-                <CartesianChart
-                  data={tickers.data}
-                  xKey="timestamp"
-                  yKeys={["price"]}
-                >
-                  {({ points }) => (
-                    <>
-                      {points.price && (
-                        <Line points={points.price} color={Colors.primaryMuted} strokeWidth={3} />
-                      )}
-                    </>
-                  )}
-                </CartesianChart>
+              <>
+                <View>
+                  <Text>{tickers.data[0]?.price}</Text>
+                </View>
+                  <CartesianChart
+                    data={tickers.data}
+                    xKey="timestamp"
+                    yKeys={["price"]}
+                    axisOptions={{
+                      labelColor: "#999",
+                      font,
+                      tickCount: { x: 1, y: 7 }
+                    }}
+                  >
+                    {({ points }) => (
+                      <>
+                        {points.price && (
+                          <Line points={points.price} color={Colors.primary} strokeWidth={2} animate={{ type: "timing", duration: 300 }}/>
+                        )}
+                      </>
+                    )}
+                  </CartesianChart>
+              </>
               )}
           </View>
           <View style={styles.descriptionBlock}>
@@ -129,9 +138,7 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
           </View>
         </>
       )} 
-    
-    >
-    </SectionList>
+    />
     ) }
     </>
     
@@ -158,10 +165,12 @@ const styles = StyleSheet.create({
     marginTop: 20
   },
   categoryText: {
-    color: Colors.gray
+    color: Colors.gray,
+    fontWeight: "500"
   },
   categoryTextActive: {
-    color: Colors.dark
+    color: Colors.primary,
+    fontWeight: "bold"
   },
   categoriesBtn: {
     padding: 10,
@@ -177,6 +186,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: Colors.white,
     borderRadius: 20,
+    shadowOffset: { width: 2, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2
   }
 });
 

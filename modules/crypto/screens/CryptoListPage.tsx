@@ -98,7 +98,7 @@ const CryptoListPage = () => {
                 />
                 <Text
                   style={{ color: currency.quote.USD.percent_change_1h > 0 ? Colors.primary : "red" }}
-                >{currency.quote.USD.percent_change_1h.toFixed(2)} %</Text>
+                >{currency.quote.USD.percent_change_1h.toFixed(2)}%</Text>
               </View>
             </View>
           </TouchableOpacity>

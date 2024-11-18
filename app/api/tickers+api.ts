@@ -5,7 +5,7 @@ export async function GET(request: Request) {
   const name = queryParams.get('name')?.toLowerCase();
 
   const response = await fetch(
-    `https://api.coinpaprika.com/v1/tickers/${symbol}-${name}/historical?start=2024-01-01&interval=1d`
+    `https://api.coinpaprika.com/v1/tickers/${symbol}-${name}/historical?start=2024-01-01&interval=7d`
   )
 
   const res = await response.json();
