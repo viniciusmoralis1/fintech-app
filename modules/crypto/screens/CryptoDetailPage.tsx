@@ -5,12 +5,24 @@ import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
 import { useQuery } from "@tanstack/react-query";
 import Colors from "@/ds/styles/Colors";
-import { CartesianChart, Line } from "victory-native";
-import { FontWeight, useFont } from "@shopify/react-native-skia";
+import { CartesianChart, Line, useChartPressState } from "victory-native";
+import { Circle, useFont } from "@shopify/react-native-skia";
+import DateFormatter from "@/utils/DateFormatter";
+import * as Haptics from "expo-haptics";
+import { SharedValue } from "react-native-reanimated";
 
 type CryptoDetailRouteProps = RouteProp<StackParamScreensList, 'CryptoDetail'>;
 type CryptoDetailPageProps = {
   route: CryptoDetailRouteProps;
+}
+
+function Tooltip({ x, y }: { x: SharedValue<number>; y: SharedValue<number> }) {
+  return (
+    <>
+      <Circle cx={x} cy={y} r={12} color={"#1AAF5955"} />
+      <Circle cx={x} cy={y} r={6} color={Colors.primary} />
+    </>
+  ) 
 }
 
 const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
@@ -18,8 +30,13 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
   const [ activeIndex, setActiveIndex ] = useState(0);
   const navigation = useNavigation<NavigationProp<StackParamScreensList>>();  
   const { currencyId } = route.params;
-  const categories = ['Overview', 'News', 'Orders', 'Transactions'];
-  const font = useFont(require('@/ds/assets/fonts/SpaceMono-Regular.ttf'), 14);
+  const timeToShow = ['Today', '5 days', '1 month', '6 months', '1 year', '5 years'];
+  const font = useFont(require('@/ds/assets/fonts/SpaceMono-Regular.ttf'), 12);
+  const { state, isActive } = useChartPressState({ x: 0, y: { price: 0}});
+
+  useEffect(() => {
+   if(isActive) Haptics.selectionAsync();
+  }, [isActive])
 
   const crypto = useQuery({
     queryKey: ['info', currencyId],
@@ -31,7 +48,7 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
 
   const tickers = useQuery({
     queryKey: ['tickers', crypto.data?.id],
-    queryFn: async (): Promise<any[]> => await fetch(`/api/tickers?symbol=${crypto.data?.symbol}&name=${crypto.data?.name}`).then(res => res.json())
+    queryFn: async (): Promise<any[]> => await fetch(`/api/tickers?symbol=${crypto.data?.symbol}&name=${crypto.data?.name}&date=${new Date()}`).then(res => res.json())
   });
 
   console.log(tickers.data)
@@ -58,7 +75,7 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
     ) : (
       <SectionList
       keyExtractor={(data) => data.title}
-      style={{ paddingHorizontal: 12, marginTop: 12 }}
+      style={{ paddingHorizontal: 8, marginTop: 12, backgroundColor: Colors.background }}
       onScroll={handleScroll}
       sections={[{ data: [{ title: "Chart" }] }]}
       renderSectionHeader={() => (
@@ -66,20 +83,16 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
           contentContainerStyle={{
             alignItems: "center",
             justifyContent: "space-between",
-            flex: 1,
-            paddingVertical: 8,
-            paddingHorizontal: 12,
-            backgroundColor: Colors.background,
-            borderBottomColor: Colors.lightGray,
-            borderBottomWidth: 0.5
+            padding: 8,
+            backgroundColor: Colors.background
           }}
           horizontal={true}
           showsHorizontalScrollIndicator={false}
         >
-          {categories.map((item, index) => (
+          {timeToShow.map((item, index) => (
             <TouchableOpacity
               key={index}
-              style={ activeIndex === index ? styles.categoriesBtnActive : styles.categoriesBtn}
+              style={ activeIndex === index ? styles.categoriesBtnActive : styles.categoriesBtn }
               onPress={() => setActiveIndex(index)}
             >
               <Text style={ activeIndex === index ? styles.categoryTextActive : styles.categoryText}>{item}</Text>
@@ -105,36 +118,33 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
       )}
       renderItem={() => (
         <>
-          <View style={{ height: 400, paddingHorizontal: 12 }} >
+          <View style={{ height: 400, margin: 8, padding: 8, borderRadius: 12, backgroundColor: Colors.white }} >
             {tickers?.data && (
-              <>
-                <View>
-                  <Text>{tickers.data[0]?.price}</Text>
-                </View>
-                  <CartesianChart
-                    data={tickers.data}
-                    xKey="timestamp"
-                    yKeys={["price"]}
-                    axisOptions={{
-                      labelColor: "#999",
-                      font,
-                      tickCount: { x: 1, y: 7 }
-                    }}
-                  >
-                    {({ points }) => (
-                      <>
-                        {points.price && (
-                          <Line points={points.price} color={Colors.primary} strokeWidth={2} animate={{ type: "timing", duration: 300 }}/>
-                        )}
-                      </>
-                    )}
-                  </CartesianChart>
-              </>
+              <CartesianChart
+                data={tickers.data}
+                xKey="timestamp"
+                yKeys={["price"]}
+                axisOptions={{
+                  labelColor: Colors.gray,
+                  font,
+                  tickCount: 5,
+                  formatXLabel: (timestamp) => DateFormatter(timestamp),
+                  formatYLabel: (price) => `$${price}`,
+                }}
+                chartPressState={state}
+              >
+                {({ points }) => (
+                  <>
+                    <Line points={points.price} color={Colors.primary} strokeWidth={2} animate={{ type: "timing", duration: 300 }}/>
+                    { isActive && <Tooltip x={state.x.position} y={state.y.price.position} /> } 
+                  </>
+                )}
+              </CartesianChart>
               )}
           </View>
           <View style={styles.descriptionBlock}>
             <Text style={styles.subtitle}>Overview</Text>
-            <Text style={{color: Colors.gray}}>{crypto.data?.description}</Text>
+            <Text style={{color: Colors.darkGray}}>{crypto.data?.description}</Text>
           </View>
         </>
       )} 
@@ -154,42 +164,43 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 20,
     fontWeight: 'bold',
-    color: Colors.gray
+    color: Colors.darkGray
   },
   descriptionBlock: {
-    marginHorizontal: 12,
+    marginHorizontal: 8,
     padding: 12,
     backgroundColor: '#fff',
-    borderRadius: 16,
+    borderRadius: 12,
     gap: 12,
     marginTop: 20
   },
   categoryText: {
-    color: Colors.gray,
+    color: Colors.darkGray,
     fontWeight: "500"
   },
   categoryTextActive: {
-    color: Colors.primary,
+    color: Colors.white,
     fontWeight: "bold"
   },
   categoriesBtn: {
-    padding: 10,
-    paddingHorizontal: 14,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     alignItems: 'center',
     justifyContent: 'center',
     borderRadius: 20,
   },
   categoriesBtnActive: {
-    padding: 10,
-    paddingHorizontal: 14,
+    flex: 1,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: Colors.white,
-    borderRadius: 20,
-    shadowOffset: { width: 2, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2
+    backgroundColor: Colors.primary,
+    borderRadius: 24,
+    shadowOffset: { width: 3, height: 3 },
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 6
   }
 });
 

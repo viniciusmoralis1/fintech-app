@@ -3,9 +3,13 @@ export async function GET(request: Request) {
   const queryParams = new URLSearchParams(parsedUrl.search);
   const symbol = queryParams.get('symbol')?.toLowerCase();
   const name = queryParams.get('name')?.toLowerCase();
+  const timeStamp = queryParams.get('date')?.toLowerCase();
+  const date = new Date(timeStamp!)
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: '2-digit', day: '2-digit' };
+  const formattedDate = date.toLocaleDateString('en-CA', options);
 
   const response = await fetch(
-    `https://api.coinpaprika.com/v1/tickers/${symbol}-${name}/historical?start=2024-01-01&interval=7d`
+    `https://api.coinpaprika.com/v1/tickers/${symbol}-${name}/historical?start=${formattedDate}&interval=1h`
   )
 
   const res = await response.json();

@@ -7,7 +7,7 @@ export default {
   dark: '#141518',
   lightGray: '#DADFEA',
   gray: "#BBB",
-  darkGray: "#495359",
+  darkGray: "#6A797F",
   white: "#FCFCFC"
 };
 
