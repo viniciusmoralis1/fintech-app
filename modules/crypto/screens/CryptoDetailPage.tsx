@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, SectionList, Text, View, Image, StyleSheet, TouchableOpacity } from "react-native";
+import { ScrollView, SectionList, Text, View, Image, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
@@ -9,12 +9,15 @@ import { CartesianChart, Line, useChartPressState } from "victory-native";
 import { Circle, useFont } from "@shopify/react-native-skia";
 import DateFormatter from "@/utils/DateFormatter";
 import * as Haptics from "expo-haptics";
-import { SharedValue } from "react-native-reanimated";
+import Animated, { SharedValue, useAnimatedProps } from "react-native-reanimated";
 
 type CryptoDetailRouteProps = RouteProp<StackParamScreensList, 'CryptoDetail'>;
 type CryptoDetailPageProps = {
   route: CryptoDetailRouteProps;
 }
+
+Animated.addWhitelistedNativeProps({ text: true, defaultValue: true })
+const AnimatedText = Animated.createAnimatedComponent(TextInput);
 
 function Tooltip({ x, y }: { x: SharedValue<number>; y: SharedValue<number> }) {
   return (
@@ -28,8 +31,8 @@ function Tooltip({ x, y }: { x: SharedValue<number>; y: SharedValue<number> }) {
 const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
   const [scrolled, setScrolled] = useState(false);
   const [ activeIndex, setActiveIndex ] = useState(0);
-  const navigation = useNavigation<NavigationProp<StackParamScreensList>>();  
   const { currencyId } = route.params;
+  const navigation = useNavigation<NavigationProp<StackParamScreensList>>();  
   const timeToShow = ['Today', '5 days', '1 month', '6 months', '1 year', '5 years'];
   const font = useFont(require('@/ds/assets/fonts/SpaceMono-Regular.ttf'), 12);
   const { state, isActive } = useChartPressState({ x: 0, y: { price: 0}});
@@ -51,11 +54,9 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
     queryFn: async (): Promise<any[]> => await fetch(`/api/tickers?symbol=${crypto.data?.symbol}&name=${crypto.data?.name}&date=${new Date()}`).then(res => res.json())
   });
 
-  console.log(tickers.data)
-
   const handleScroll = (event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y;
-    if (offsetY > 30 && !scrolled) {
+    if (offsetY > 27 && !scrolled) {
       setScrolled(true);
     } else if (offsetY <= 30 && scrolled) {
       setScrolled(false);
@@ -68,90 +69,127 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
     });
   }, [scrolled, navigation]);
 
+  const animatedValueText = useAnimatedProps(() => {
+    return {
+      text: `$ ${state.y.price.value.value.toFixed(2)}`,
+      defaultValue: `$ ${state.y.price.value.value}`,
+    }
+  })
+
+  const animatedDateText = useAnimatedProps(() => {
+    const date = new Date(state.x.value.value).toLocaleString();
+
+    return {
+      text: `${date}`,
+      defaultValue: `${date}`
+    }
+  })
+
   return (
     <>
     { (crypto.isLoading || tickers.isLoading) ? (
       <View></View>
     ) : (
       <SectionList
-      keyExtractor={(data) => data.title}
-      style={{ paddingHorizontal: 8, marginTop: 12, backgroundColor: Colors.background }}
-      onScroll={handleScroll}
-      sections={[{ data: [{ title: "Chart" }] }]}
-      renderSectionHeader={() => (
-        <ScrollView
-          contentContainerStyle={{
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: 8,
-            backgroundColor: Colors.background
-          }}
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-        >
-          {timeToShow.map((item, index) => (
-            <TouchableOpacity
-              key={index}
-              style={ activeIndex === index ? styles.categoriesBtnActive : styles.categoriesBtn }
-              onPress={() => setActiveIndex(index)}
-            >
-              <Text style={ activeIndex === index ? styles.categoryTextActive : styles.categoryText}>{item}</Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      )}
-      ListHeaderComponent={() => (
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginHorizontal: 16
-          }}
-        >
-          <View style={{flexDirection: "column", marginBottom: 12}}>
-            <Text style={styles.title}>{crypto.data?.name}</Text>
-            <Text style={styles.subtitle} >{crypto.data?.symbol}</Text>
-          </View>
-          <Image source={{ uri: crypto?.data?.logo }} style={{width: 60, height: 60}} />
-        </View>
-      )}
-      renderItem={() => (
+        keyExtractor={(data) => data.title}
+        style={{ paddingHorizontal: 8, backgroundColor: Colors.background }}
+        onScroll={handleScroll}
+        sections={[{ data: [{ title: "Chart" }] }]}
+        renderSectionHeader={() => (
         <>
-          <View style={{ height: 400, margin: 8, padding: 8, borderRadius: 12, backgroundColor: Colors.white }} >
-            {tickers?.data && (
-              <CartesianChart
-                data={tickers.data}
-                xKey="timestamp"
-                yKeys={["price"]}
-                axisOptions={{
-                  labelColor: Colors.gray,
-                  font,
-                  tickCount: 5,
-                  formatXLabel: (timestamp) => DateFormatter(timestamp),
-                  formatYLabel: (price) => `$${price}`,
-                }}
-                chartPressState={state}
-              >
-                {({ points }) => (
-                  <>
-                    <Line points={points.price} color={Colors.primary} strokeWidth={2} animate={{ type: "timing", duration: 300 }}/>
-                    { isActive && <Tooltip x={state.x.position} y={state.y.price.position} /> } 
-                  </>
-                )}
-              </CartesianChart>
-              )}
-          </View>
-          <View style={styles.descriptionBlock}>
-            <Text style={styles.subtitle}>Overview</Text>
-            <Text style={{color: Colors.darkGray}}>{crypto.data?.description}</Text>
-          </View>
+          { !isActive && (
+            <ScrollView
+              contentContainerStyle={{
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: 8,
+                backgroundColor: Colors.background
+              }}
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              {timeToShow.map((item, index) => (
+                <TouchableOpacity
+                  key={index}
+                  style={ activeIndex === index ? styles.categoriesBtnActive : styles.categoriesBtn }
+                  onPress={() => setActiveIndex(index)}
+                >
+                  <Text style={ activeIndex === index ? styles.categoryTextActive : styles.categoryText}>{item}</Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          )}
+          
+          { isActive && (
+            <View style={styles.valueContainer}>
+              <View style={{ flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
+                <Text style={styles.valueText} >Value on </Text>
+                <AnimatedText
+                  style={styles.valueText}
+                  editable={false}
+                  animatedProps={animatedDateText}
+                />
+              </View>
+              <AnimatedText
+                style={styles.categoryTextActive}
+                editable={false}
+                animatedProps={animatedValueText}
+              />
+            </View>
+          )}
         </>
-      )} 
-    />
-    ) }
+        )}
+        ListHeaderComponent={() => (
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginHorizontal: 16
+            }}
+          >
+            <View style={{flexDirection: "column", marginBottom: 12}}>
+              <Text style={styles.title}>{crypto.data?.name}</Text>
+              <Text style={styles.subtitle} >{crypto.data?.symbol}</Text>
+            </View>
+            <Image source={{ uri: crypto?.data?.logo }} style={{width: 60, height: 60}} />
+          </View>
+        )}
+        renderItem={() => (
+          <>
+            <View style={styles.cartesianContainer} >
+              {tickers?.data && (
+                <CartesianChart
+                  data={tickers.data}
+                  xKey="timestamp"
+                  yKeys={["price"]}
+                  axisOptions={{
+                    labelColor: Colors.gray,
+                    font,
+                    tickCount: 5,
+                    formatXLabel: (timestamp: string) => DateFormatter(timestamp, activeIndex),
+                    formatYLabel: (price) => `$${price}`,
+                  }}
+                  chartPressState={state}
+                >
+                  {({ points }) => (
+                    <>
+                      <Line points={points.price} color={Colors.primary} strokeWidth={2} animate={{ type: "timing", duration: 300 }}/>
+                      { isActive && <Tooltip x={state.x.position} y={state.y.price.position} /> } 
+                    </>
+                  )}
+                </CartesianChart>
+                )}
+            </View>
+            <View style={styles.descriptionBlock}>
+              <Text style={styles.subtitle}>Overview</Text>
+              <Text style={{color: Colors.darkGray}}>{crypto.data?.description}</Text>
+            </View>
+          </>
+        )}
+      />
+    )}
     </>
-    
   )
 }
 
@@ -201,7 +239,29 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 6,
     elevation: 6
-  }
+  },
+  cartesianContainer: {
+    height: 400,
+    margin: 8,
+    padding: 8,
+    borderRadius: 12,
+    backgroundColor: Colors.white,
+  },
+  valueContainer: { 
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: Colors.primaryMuted,
+    borderRadius: 24,
+    flexDirection: "row",
+    marginVertical: 8,
+    padding: 4,
+    paddingHorizontal: 12,
+  },
+  valueText: {
+    color: Colors.white,
+    fontWeight: "500"
+  },
 });
 
 export default CryptoDetailPage;

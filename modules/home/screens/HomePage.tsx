@@ -5,6 +5,7 @@ import { RoundButton } from "@/ds/components";
 import { useBalanceStore } from "@/store/balanceStore";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
+import FormatMoney from "@/utils/MoneyFormatter";
 import Colors from "@/ds/styles/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Mastercard from "@/ds/assets/svg/MastercardIcon";
@@ -63,14 +64,6 @@ const HomePage = () => {
     onPressAction: () => {}
   }];
 
-  function formatValue(price: number){
-    const formatter = new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 2
-    });
-
-    return formatter.format(Number(price.toFixed(2)));
-  }
-
   return (
     <ScrollView contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: 40 }}>
       <View style={{ flexDirection: "row", flex: 1, margin: 32, gap: 12 }}>
@@ -78,7 +71,7 @@ const HomePage = () => {
           <Text style={{ color: Colors.white, marginBottom: 16 }}>MAIN BALANCE</Text>
           <View style={styles.balanceContainer}>
             <Text style={styles.currency}>$</Text>
-            <Text style={styles.balance}>{balance().valueOf() === 0  ? balance() : formatValue(balance())}</Text>
+            <Text style={styles.balance}>{balance().valueOf() === 0  ? balance() : FormatMoney(balance())}</Text>
           </View>
           <Text style={{ color: Colors.white, marginTop: 8, backgroundColor: Colors.primaryMuted, borderRadius: 30, padding: 6, fontWeight: "500"}} >+ 2,3%</Text>
         </View>
@@ -122,7 +115,7 @@ const HomePage = () => {
               <Text style={{ fontWeight: "500" }}>{transaction.title}</Text>
               <Text style={{ color: Colors.gray, fontSize: 12 }}>{transaction.date.toLocaleString()}</Text>
             </View>
-            <Text style={{ fontSize: 16 }}>$ {formatValue(transaction.amount)}</Text>
+            <Text style={{ fontSize: 16 }}>$ {FormatMoney(transaction.amount)}</Text>
           </View>
         ))}
       </View>
