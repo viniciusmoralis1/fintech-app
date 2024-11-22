@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { ScrollView, SectionList, Text, View, Image, StyleSheet, TouchableOpacity, TextInput } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import Colors from "@/ds/styles/Colors";
 import { CartesianChart, Line, useChartPressState } from "victory-native";
 import { Circle, useFont } from "@shopify/react-native-skia";
-import DateFormatter from "@/utils/DateFormatter";
+import { DateFormatter , GenerateDate } from "@/utils/DateFormatter";
 import * as Haptics from "expo-haptics";
 import Animated, { SharedValue, useAnimatedProps } from "react-native-reanimated";
 
@@ -29,17 +29,27 @@ function Tooltip({ x, y }: { x: SharedValue<number>; y: SharedValue<number> }) {
 }
 
 const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
-  const [scrolled, setScrolled] = useState(false);
-  const [ activeIndex, setActiveIndex ] = useState(0);
+  const [ scrolled, setScrolled ] = useState(false);
+  const [ activeIndex, setActiveIndex ] = useState(2);
+  const [ selectedDate, setSelectedDate ] = useState(new Date());
   const { currencyId } = route.params;
   const navigation = useNavigation<NavigationProp<StackParamScreensList>>();  
-  const timeToShow = ['Today', '5 days', '1 month', '6 months', '1 year', '5 years'];
+  const timeToShow = ['Today', '5 days', '1 month', '6 months', '1 year'];
   const font = useFont(require('@/ds/assets/fonts/SpaceMono-Regular.ttf'), 12);
   const { state, isActive } = useChartPressState({ x: 0, y: { price: 0}});
 
   useEffect(() => {
    if(isActive) Haptics.selectionAsync();
-  }, [isActive])
+  }, [isActive]);
+
+  const updateSelectedDate = useCallback(() => {
+    const date = GenerateDate(activeIndex);
+    setSelectedDate(date);
+  }, [activeIndex]);
+
+  useEffect(() => {
+    updateSelectedDate();
+  }, [activeIndex, updateSelectedDate]);
 
   const crypto = useQuery({
     queryKey: ['info', currencyId],
@@ -49,9 +59,10 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
     }
   });
 
-  const tickers = useQuery({
-    queryKey: ['tickers', crypto.data?.id],
-    queryFn: async (): Promise<any[]> => await fetch(`/api/tickers?symbol=${crypto.data?.symbol}&name=${crypto.data?.name}&date=${new Date()}`).then(res => res.json())
+  let tickers = useQuery({
+    queryKey: ['tickers', crypto.data?.id, selectedDate],
+    queryFn: async (): Promise<any[]> => await fetch(`/api/tickers?symbol=${crypto.data?.symbol}&name=${crypto.data?.name}&date=${selectedDate}`).then(res => res.json()),
+    enabled: !!selectedDate
   });
 
   const handleScroll = (event: any) => {

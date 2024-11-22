@@ -3,11 +3,10 @@ enum DateType {
   FIVE_DAYS = 1,
   ONE_MONTH = 2,
   SIX_MONTHS = 3,
-  ONE_YEAR = 4,
-  FIVE_YEARS = 5
+  ONE_YEAR = 4
 }
 
-export default function DateFormatter(date: string | Date, formatOptions?: number): string {
+export function DateFormatter(date: string | Date, formatOptions?: number): string {
   if (typeof date === 'string') {
     date = new Date(date);
   }
@@ -41,4 +40,31 @@ export default function DateFormatter(date: string | Date, formatOptions?: numbe
   const formatter = new Intl.DateTimeFormat('en-US', options);
 
   return formatter.format(date);
+};
+
+export function GenerateDate(activeIndex: number){
+  const today = new Date();
+  const resultDate = new Date(today);
+
+  console.log(activeIndex)
+
+  switch (activeIndex) {
+    case DateType.FIVE_DAYS:
+      resultDate.setDate(today.getDate() - 5);
+      break;
+    case DateType.ONE_MONTH:
+      resultDate.setMonth(today.getMonth() - 1);
+      break;
+    case DateType.SIX_MONTHS:
+      resultDate.setMonth(today.getMonth() - 6);
+      break;
+    case DateType.ONE_YEAR:
+      resultDate.setFullYear(today.getMonth() - 11);
+      break;
+    case DateType.TODAY:
+    default:
+      break;
+  }
+
+  return resultDate;
 }
