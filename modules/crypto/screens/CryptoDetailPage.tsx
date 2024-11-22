@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import Colors from "@/ds/styles/Colors";
 import { CartesianChart, Line, useChartPressState } from "victory-native";
 import { Circle, useFont } from "@shopify/react-native-skia";
-import { DateFormatter , GenerateDate } from "@/utils/DateFormatter";
+import { DateFormatter , GenerateDate, GenerateInterval } from "@/utils/DateFormatter";
 import * as Haptics from "expo-haptics";
 import Animated, { SharedValue, useAnimatedProps } from "react-native-reanimated";
 
@@ -32,6 +32,7 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
   const [ scrolled, setScrolled ] = useState(false);
   const [ activeIndex, setActiveIndex ] = useState(2);
   const [ selectedDate, setSelectedDate ] = useState(new Date());
+  const [ interval, setInterval ] = useState('1h');
   const { currencyId } = route.params;
   const navigation = useNavigation<NavigationProp<StackParamScreensList>>();  
   const timeToShow = ['Today', '5 days', '1 month', '6 months', '1 year'];
@@ -44,6 +45,8 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
 
   const updateSelectedDate = useCallback(() => {
     const date = GenerateDate(activeIndex);
+    const intervalTime = GenerateInterval(activeIndex);
+    setInterval(intervalTime);
     setSelectedDate(date);
   }, [activeIndex]);
 
@@ -61,7 +64,8 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
 
   let tickers = useQuery({
     queryKey: ['tickers', crypto.data?.id, selectedDate],
-    queryFn: async (): Promise<any[]> => await fetch(`/api/tickers?symbol=${crypto.data?.symbol}&name=${crypto.data?.name}&date=${selectedDate}`).then(res => res.json()),
+    queryFn: async (): Promise<any[]> => await 
+      fetch(`/api/tickers?symbol=${crypto.data?.symbol}&name=${crypto.data?.name}&date=${selectedDate}&interval=${interval}`).then(res => res.json()),
     enabled: !!selectedDate
   });
 

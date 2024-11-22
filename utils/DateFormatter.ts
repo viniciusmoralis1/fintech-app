@@ -59,7 +59,8 @@ export function GenerateDate(activeIndex: number){
       resultDate.setMonth(today.getMonth() - 6);
       break;
     case DateType.ONE_YEAR:
-      resultDate.setFullYear(today.getMonth() - 11);
+      resultDate.setMonth(today.getMonth() - 11);
+      resultDate.setDate(today.getDate() - 25);
       break;
     case DateType.TODAY:
     default:
@@ -67,4 +68,15 @@ export function GenerateDate(activeIndex: number){
   }
 
   return resultDate;
+}
+
+export function GenerateInterval(activeIndex: number){
+  if(activeIndex == DateType.TODAY)
+    return "1h";
+  if(activeIndex == DateType.FIVE_DAYS || activeIndex == DateType.ONE_MONTH)
+    return "1d";
+  if(activeIndex == DateType.SIX_MONTHS)
+    return "7d";
+  else
+    return "14d";
 }
