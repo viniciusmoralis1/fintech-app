@@ -3,10 +3,11 @@ import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from "rea
 import { useQuery } from "@tanstack/react-query";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
-import Colors from "@/ds/styles/Colors";
-import { Currency } from "../interface/cryptoInterface";
-import Ionicons from "@expo/vector-icons/Ionicons";
 import { CryptoItemSkeleton } from "../components/CryptoItemSkeleton";
+import { Currency } from "../interface/cryptoInterface";
+import Colors from "@/ds/styles/Colors";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import FormatCryptoValue from "@/utils/CryptoValueFormatter";
 
 const CryptoListPage = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -23,40 +24,22 @@ const CryptoListPage = () => {
 
   useEffect(() => {
     navigation.setOptions({
-      headerTitle: scrolled ? 'Trending Cryptos' : '',
+      headerTitle: scrolled ? "Trending Cryptos" : "",
     });
-  }, [scrolled, navigation]);
+  }, [scrolled]);
 
   const currencies = useQuery({
-    queryKey: ['listings'],
-    queryFn: () => fetch('/api/listings').then(res => res.json())
+    queryKey: ["listings"],
+    queryFn: () => fetch("/api/listings").then(res => res.json())
   });
 
-  const ids = currencies.data?.map((currency: Currency) => currency.id).join(',');
+  const ids = currencies.data?.map((currency: Currency) => currency.id).join(",");
 
   const info = useQuery({
-    queryKey: ['info', ids],
+    queryKey: ["info", ids],
     queryFn: () => fetch(`/api/info?ids=${ids}`).then(res => res.json()),
     enabled: !!ids
   });
-
-  function formatPrice(price: number){
-    let decimalPlaces = 2;
-
-    const formatter = new Intl.NumberFormat('en-US', {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 8
-    });
-
-    while (decimalPlaces < 9) {
-      const roundedNumber = Number(price.toFixed(decimalPlaces));
-      if (roundedNumber > 0){
-        return formatter.format(Number(roundedNumber.toFixed((decimalPlaces + 3))));
-      }
-      decimalPlaces++
-    }
-    return price.toFixed(decimalPlaces);
-  }
 
   return (
     <ScrollView style={[styles.container, { paddingTop: 16 }]} onScroll={handleScroll}>
@@ -79,7 +62,13 @@ const CryptoListPage = () => {
           <TouchableOpacity 
             style={styles.cryptoItem}
             key={ currency.id }
-            onPress={() => { navigation.navigate("CryptoDetail", { currencyId: currency.id }) }}
+            onPress={() => { navigation.navigate("CryptoDetail", {
+                currencyId: currency.id,
+                currencyName: currency.name,
+                currencyPrice: currency.quote.USD.price,
+                currency24hChange: currency.quote.USD.percent_change_24h.toFixed(2)
+              })
+            }}
           >
             <View style={{flexDirection: "row", gap: 12, alignItems: "center"}} >
               <Image source={{ uri: info?.data?.[currency.id]?.logo }} style={{ width: 36, height: 36 }} />
@@ -89,16 +78,16 @@ const CryptoListPage = () => {
               </View>
             </View>
             <View style={{ gap: 4, alignItems: "flex-end" }} >
-              <Text style={{ fontWeight: "500" }} >$ {formatPrice(currency.quote.USD.price)}</Text>
-              <View style={{ flexDirection: "row", gap: 2 }} >
+              <Text style={{ fontWeight: "500" }} >$ {FormatCryptoValue(currency.quote.USD.price)}</Text>
+              <View style={{ flexDirection: "row", gap: 2, alignItems: "center" }} >
                 <Ionicons
-                  name={currency.quote.USD.percent_change_1h > 0 ? "caret-up" : "caret-down"}
+                  name={currency.quote.USD.percent_change_24h > 0 ? "arrow-up" : "arrow-down"}
                   size={16}
-                  color={currency.quote.USD.percent_change_1h > 0 ? Colors.primary : "red"}
+                  color={currency.quote.USD.percent_change_24h > 0 ? Colors.primary : "red"}
                 />
                 <Text
-                  style={{ color: currency.quote.USD.percent_change_1h > 0 ? Colors.primary : "red" }}
-                >{currency.quote.USD.percent_change_1h.toFixed(2)}%</Text>
+                  style={{ color: currency.quote.USD.percent_change_24h > 0 ? Colors.primary : "red" }}
+                >{currency.quote.USD.percent_change_24h.toFixed(2)}%</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -113,6 +102,7 @@ const styles = StyleSheet.create({
   container: { 
     paddingHorizontal: 8,
     flex: 1,
+    backgroundColor: Colors.background
   },
   cryptoSectionHeader: {
     fontSize: 20,

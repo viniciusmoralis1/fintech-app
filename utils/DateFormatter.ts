@@ -46,8 +46,6 @@ export function GenerateDate(activeIndex: number){
   const today = new Date();
   const resultDate = new Date(today);
 
-  console.log(activeIndex)
-
   switch (activeIndex) {
     case DateType.FIVE_DAYS:
       resultDate.setDate(today.getDate() - 5);

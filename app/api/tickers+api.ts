@@ -1,6 +1,7 @@
 export async function GET(request: Request) {
   const parsedUrl = new URL(request.url, `http://${request.headers.get('host')}`)
   const queryParams = new URLSearchParams(parsedUrl.search);
+
   const symbol = queryParams.get('symbol')?.toLowerCase();
   const name = queryParams.get('name')?.toLowerCase();
   const timeStamp = queryParams.get('date')?.toLowerCase();
