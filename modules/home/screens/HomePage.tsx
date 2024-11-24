@@ -29,10 +29,6 @@ const HomePage = () => {
     clearTransactions()
   }
 
-  const navigateToCrypto = () => {
-    navigation.navigate("CryptoList");
-  }
-
   const optionsList = [{
     icon: "add",
     text: "Add money",
@@ -46,7 +42,7 @@ const HomePage = () => {
   {
     icon: "list",
     text: "Details",
-    onPressAction: navigateToCrypto
+    onPressAction: () => {}
   },
   {
     icon: "stats-chart-outline",
