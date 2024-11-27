@@ -1,60 +1,47 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-
-import HomePage from "@/modules/home/screens/HomePage";
-import CryptoListPage from "@/modules/crypto/screens/CryptoListPage";
 import { CustomHeader } from "@/ds/components";
 import { Ionicons } from "@expo/vector-icons";
 import Colors from "@/ds/styles/Colors";
-import { BlurView } from "expo-blur";
+
+import HomePage from "@/modules/home/screens/HomePage";
+import CryptoListPage from "@/modules/crypto/screens/CryptoListPage";
 
 const Tab = createBottomTabNavigator();
 
 export default function MyTabs() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        header: () => <CustomHeader />,
+        headerTransparent: true,
+        tabBarStyle: styles.tabBar,
+        tabBarItemStyle: styles.tabBarItem,
+        tabBarShowLabel: false,
+        tabBarActiveBackgroundColor: Colors.tertiary,
+        tabBarActiveTintColor: Colors.primary,
+      }}
+    >
       <Tab.Screen
         name="Home"
         component={HomePage}
         options={{
-          header: () => <CustomHeader />,
-          headerTransparent: true,
-          tabBarIcon: ({color, focused}) => <Ionicons name={focused ? "home" : "home-outline"} size={24} color={color} />,
-          tabBarStyle: styles.tabBar,
-          tabBarItemStyle: styles.tabBarItem,
-          tabBarActiveBackgroundColor: Colors.tertiary,
-          tabBarActiveTintColor: Colors.primary,
-          tabBarShowLabel: false,
+          tabBarIcon: ({color, focused}) => <Ionicons name={focused ? "home" : "home-outline"} size={24} color={color} />
         }}
       />
       <Tab.Screen
         name="Invest"
         component={CryptoListPage}
         options={{
-          header: () => <CustomHeader />,
-          headerTransparent: true,
-          tabBarIcon: ({color, focused}) => <Ionicons name={focused ? "analytics-sharp" : "analytics-outline"} size={28} color={color} />,
-          tabBarStyle: styles.tabBar,
-          tabBarItemStyle: styles.tabBarItem,
-          tabBarActiveBackgroundColor: Colors.tertiary,
-          tabBarActiveTintColor: Colors.primary,
-          tabBarShowLabel: false,
+          tabBarIcon: ({color, focused}) => <Ionicons name={focused ? "analytics-sharp" : "analytics-outline"} size={28} color={color} />
         }}
       />
       <Tab.Screen
         name="Menu"
         component={CryptoListPage}
         options={{
-          header: () => <CustomHeader />,
-          headerTransparent: true,
-          tabBarIcon: ({color, focused}) => <Ionicons name={focused ? "grid" : "grid-outline"} size={24} color={color} />,
-          tabBarStyle: styles.tabBar,
-          tabBarBackground: () =>  <BlurView intensity={100} tint="extraLight" />,
-          tabBarItemStyle: styles.tabBarItem,
-          tabBarActiveBackgroundColor: Colors.tertiary,
-          tabBarActiveTintColor: Colors.primary,
-          tabBarShowLabel: false,
+          tabBarIcon: ({color, focused}) => <Ionicons name={focused ? "grid" : "grid-outline"} size={24} color={color} />
         }}
       />
     </Tab.Navigator>

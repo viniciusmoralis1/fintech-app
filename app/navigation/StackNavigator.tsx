@@ -6,6 +6,8 @@ import LoginPage from "@/modules/account/screens/LoginPage";
 import CryptoDetailPage from "@/modules/crypto/screens/CryptoDetailPage";
 import AccountPage from "@/modules/account/screens/AccountPage";
 import MyTabs from "./TabNavigator";
+import AddFundPage from "@/modules/trade/screens/AddFundPage";
+import { StyleSheet } from "react-native";
 
 const Stack = createNativeStackNavigator<StackParamScreensList>();
 
@@ -15,6 +17,7 @@ export type StackParamScreensList = {
   Login: undefined;
   Account: undefined;
   CryptoDetail: { currencyId: number, currencyName: string, currencyPrice: number, currency24hChange: string };
+  AddFund: undefined;
   Tabs: undefined;
 }
 
@@ -26,7 +29,14 @@ export default function StackNavigator() {
       <Stack.Screen name="Login" component={LoginPage} options={{headerTitle: "", headerShadowVisible: false, headerTransparent: true}}/>
       <Stack.Screen name="Account" component={AccountPage} options={{headerTitle: "", headerShadowVisible: false, headerTransparent: true}}/>
       <Stack.Screen name="CryptoDetail" component={CryptoDetailPage} options={{headerTitle: "", headerShadowVisible: false, headerLargeTitle: true}}/>
+      <Stack.Screen name="AddFund" component={AddFundPage} options={{headerTitle: "Enter amount", headerTitleAlign: "center",  headerShadowVisible: false, headerTitleStyle: styles.headerTitle}}/>
       <Stack.Screen name="Tabs" component={MyTabs} options={{headerShown: false}} />
     </Stack.Navigator>
   );
 };
+
+const styles = StyleSheet.create({
+  headerTitle: {
+    fontSize: 16
+  }
+})

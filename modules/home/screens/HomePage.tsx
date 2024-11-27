@@ -16,6 +16,10 @@ const HomePage = () => {
 
   const headerHeight = useHeaderHeight();
 
+  const navigateToAddFund = () => {
+    navigation.navigate("AddFund");
+  }
+
   const onAddMoney = () => {
     runTransaction({
       id: Math.random().toString(),
@@ -32,7 +36,7 @@ const HomePage = () => {
   const optionsList = [{
     icon: "add",
     text: "Add money",
-    onPressAction: onAddMoney
+    onPressAction: navigateToAddFund
   },
   {
     icon: "refresh",
