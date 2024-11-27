@@ -24,7 +24,7 @@ const AnimatedText = Animated.createAnimatedComponent(TextInput);
 function Tooltip({ x, y }: { x: SharedValue<number>; y: SharedValue<number> }) {
   return (
     <>
-      <Circle cx={x} cy={y} r={12} color={"#1AAF5955"} />
+      <Circle cx={x} cy={y} r={12} color={Colors.primaryTransparency} />
       <Circle cx={x} cy={y} r={6} color={Colors.primary} />
     </>
   )

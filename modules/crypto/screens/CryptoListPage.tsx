@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, Image, TouchableOpacity, ScrollView, StyleSheet } from "react-native";
+import { useHeaderHeight } from "@react-navigation/elements";
 import { useQuery } from "@tanstack/react-query";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
@@ -12,6 +13,8 @@ import FormatCryptoValue from "@/utils/CryptoValueFormatter";
 const CryptoListPage = () => {
   const [scrolled, setScrolled] = useState(false);
   const navigation = useNavigation<NavigationProp<StackParamScreensList>>();
+
+  const headerHeight = useHeaderHeight();
 
   const handleScroll = (event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y;
@@ -42,7 +45,7 @@ const CryptoListPage = () => {
   });
 
   return (
-    <ScrollView style={[styles.container, { paddingTop: 16 }]} onScroll={handleScroll}>
+    <ScrollView style={[styles.container, { paddingTop: headerHeight }]} onScroll={handleScroll}>
       <Text style={styles.cryptoSectionHeader}>Trending Cryptos</Text>
       <View style={styles.cryptoList}>
 

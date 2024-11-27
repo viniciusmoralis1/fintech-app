@@ -1,6 +1,6 @@
 import * as React from "react";
 import { View, ScrollView, StyleSheet, Text, FlatList } from "react-native";
-import { useHeaderHeight } from "@react-navigation/elements"
+import { useHeaderHeight } from "@react-navigation/elements";
 import { RoundButton } from "@/ds/components";
 import { useBalanceStore } from "@/store/balanceStore";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
@@ -73,7 +73,7 @@ const HomePage = () => {
         </View>
       <View>
         <View style={styles.mainCardContainer}>
-          <Text style={{ color: "#FFF", marginBottom: 18 }}>MAIN CARD</Text>
+          <Text style={{ color: Colors.primary, marginBottom: 18 }}>MAIN CARD</Text>
           <View style={styles.balanceContainer}>
             <Text style={{ color: Colors.primary, fontSize: 24, fontWeight: "bold" }}>** 5910</Text>
           </View>

@@ -1,8 +1,9 @@
 export default {
   primary: "#1AAF59",
   primaryMuted: "#056F32",
+  primaryTransparency: "#1AAF5940",
   secondary: "#22A8AF",
-  tertiary: "#BDECB6",
+  tertiary: "#C1FFC6",
   background: "#F9F9F9",
   dark: "#141518",
   lightGray: "#DADFEA",
