@@ -45,7 +45,7 @@ const CryptoListPage = () => {
   });
 
   return (
-    <ScrollView style={[styles.container, { paddingTop: headerHeight }]} onScroll={handleScroll}>
+    <ScrollView style={[styles.container, { marginTop: headerHeight }]} onScroll={handleScroll}>
       <Text style={styles.cryptoSectionHeader}>Trending Cryptos</Text>
       <View style={styles.cryptoList}>
 

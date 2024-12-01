@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { ScrollView, SectionList, Text, View, Image, StyleSheet, TouchableOpacity, TextInput } from "react-native";
+import { ScrollView, SectionList, Text, View, Image, StyleSheet, TouchableOpacity, TextInput, useWindowDimensions } from "react-native";
 import { RouteProp } from "@react-navigation/native";
 import { NavigationProp, useNavigation } from "@react-navigation/native";
 import { StackParamScreensList } from "@/app/navigation/StackNavigator";
@@ -12,6 +12,7 @@ import * as Haptics from "expo-haptics";
 import Animated, { SharedValue, useAnimatedProps } from "react-native-reanimated";
 import FormatCryptoValue from "@/utils/CryptoValueFormatter";
 import Ionicons from "@expo/vector-icons/Ionicons";
+import { Shimmer } from "@/ds/components/Shimmer";
 
 type CryptoDetailRouteProps = RouteProp<StackParamScreensList, "CryptoDetail">;
 type CryptoDetailPageProps = {
@@ -43,6 +44,8 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
   navigation.setOptions({
     headerTitle: currencyName,
   })
+
+  const dimension = useWindowDimensions()
 
   useEffect(() => {
    if(isActive) Haptics.selectionAsync();
@@ -174,8 +177,8 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
         )}
         renderItem={() => (
           <>
-            <View style={styles.cartesianContainer} >
-              {tickers?.data && (
+            {tickers?.data ? (
+              <View style={styles.cartesianContainer} >
                 <CartesianChart
                   data={tickers.data}
                   xKey="timestamp"
@@ -196,8 +199,10 @@ const CryptoDetailPage: React.FC<CryptoDetailPageProps> = ({route}) => {
                     </>
                   )}
                 </CartesianChart>
-                )}
-            </View>
+              </View>
+            ) : (
+              <Shimmer height={400} width={dimension.width}/>
+            )}
             <View style={styles.descriptionBlock}>
               <Text style={styles.subtitle}>Overview</Text>
               <Text style={{color: Colors.darkGray}}>{crypto.data?.description}</Text>
@@ -262,7 +267,7 @@ const styles = StyleSheet.create({
     margin: 8,
     padding: 8,
     borderRadius: 12,
-    backgroundColor: Colors.white,
+    backgroundColor: Colors.primary,
   },
   valueContainer: { 
     flex: 1,
