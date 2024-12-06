@@ -7,7 +7,6 @@ import { StackParamScreensList } from "@/app/navigation/StackNavigator";
 import Colors from "../styles/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 
-
 export const CustomHeader: React.FC = () => {
   const { top } = useSafeAreaInsets();
   const navigation = useNavigation<NavigationProp<StackParamScreensList>>();
