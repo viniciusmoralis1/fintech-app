@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import { View, ScrollView, StyleSheet, Text, FlatList } from "react-native";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { RoundButton } from "@/ds/components";
@@ -9,10 +9,13 @@ import FormatMoney from "@/utils/MoneyFormatter";
 import Colors from "@/ds/styles/Colors";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import Mastercard from "@/ds/assets/svg/MastercardIcon";
+import { BottomSheet } from "@/ds/components/BottomSheet";
 
 const HomePage = () => {
   const { balance, runTransaction, transactions, clearTransactions } = useBalanceStore();
   const navigation = useNavigation<NavigationProp<StackParamScreensList>>();
+
+  const [showBottomSheet, setShowBottomSheet] = useState(false)
 
   const headerHeight = useHeaderHeight();
 
@@ -51,7 +54,7 @@ const HomePage = () => {
   {
     icon: "stats-chart-outline",
     text: "Statement",
-    onPressAction: () => {}
+    onPressAction: () => setShowBottomSheet(prev => !prev)
   },
   {
     icon: "cash-outline",
@@ -65,61 +68,67 @@ const HomePage = () => {
   }];
 
   return (
-    <ScrollView contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: 40 }}>
-      <View style={{ flexDirection: "row", flex: 1, margin: 32, gap: 12 }}>
-        <View style={styles.accountContainer}>
-          <Text style={{ color: Colors.white, marginBottom: 16 }}>MAIN BALANCE</Text>
-          <View style={styles.balanceContainer}>
-            <Text style={styles.currency}>$</Text>
-            <Text style={styles.balance}>{balance().valueOf() === 0  ? balance() : FormatMoney(balance())}</Text>
-          </View>
-          <Text style={{ color: Colors.white, marginTop: 8, backgroundColor: Colors.primaryMuted, borderRadius: 30, padding: 6, fontWeight: "500"}} >+ 2,3%</Text>
-        </View>
-      <View>
-        <View style={styles.mainCardContainer}>
-          <Text style={{ color: Colors.primary, marginBottom: 18 }}>MAIN CARD</Text>
-          <View style={styles.balanceContainer}>
-            <Text style={{ color: Colors.primary, fontSize: 24, fontWeight: "bold" }}>** 5910</Text>
-          </View>
-          <Mastercard />
-        </View>
-      </View>
-
-      </View>
-
-      <FlatList
-        data={optionsList}
-        renderItem={(data) =>
-          <RoundButton
-            list={true}
-            icon={data.item.icon}
-            text={data.item.text}
-            onPressAction={() => {data.item.onPressAction()}}
-          />
-        }
-        horizontal
-        showsHorizontalScrollIndicator={false}
-      />
-
-      <Text style={styles.transactionSectionHeader}>Transactions</Text>
-      <View style={styles.transactionSection}>
-        { transactions.length === 0 && (
-          <Text style={styles.noTransactionsText}>Nothing to show yet</Text>
-        )}
-        { transactions.reverse().map((transaction) => (
-          <View key={transaction.id} style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
-            <View style={styles.circle}>
-              <Ionicons name={transaction.amount > 0 ? "add" : "remove"} size={24} />
+    <>
+      <ScrollView contentContainerStyle={{ paddingTop: headerHeight, paddingBottom: 40 }}>
+        <View style={{ flexDirection: "row", flex: 1, margin: 32, gap: 12 }}>
+          <View style={styles.accountContainer}>
+            <Text style={{ color: Colors.white, marginBottom: 16 }}>MAIN BALANCE</Text>
+            <View style={styles.balanceContainer}>
+              <Text style={styles.currency}>$</Text>
+              <Text style={styles.balance}>{balance().valueOf() === 0  ? balance() : FormatMoney(balance())}</Text>
             </View>
-            <View style={{ flex: 1 }}>
-              <Text style={{ fontWeight: "500" }}>{transaction.title}</Text>
-              <Text style={{ color: Colors.gray, fontSize: 12 }}>{transaction.date.toLocaleString()}</Text>
-            </View>
-            <Text style={{ fontSize: 16 }}>$ {FormatMoney(transaction.amount)}</Text>
+            <Text style={{ color: Colors.white, marginTop: 8, backgroundColor: Colors.primaryMuted, borderRadius: 30, padding: 6, fontWeight: "500"}} >+ 2,3%</Text>
           </View>
-        ))}
-      </View>
-    </ScrollView>
+        <View>
+          <View style={styles.mainCardContainer}>
+            <Text style={{ color: Colors.primary, marginBottom: 18 }}>MAIN CARD</Text>
+            <View style={styles.balanceContainer}>
+              <Text style={{ color: Colors.primary, fontSize: 24, fontWeight: "bold" }}>** 5910</Text>
+            </View>
+            <Mastercard />
+          </View>
+        </View>
+
+        </View>
+
+        <FlatList
+          data={optionsList}
+          renderItem={(data) =>
+            <RoundButton
+              list={true}
+              icon={data.item.icon}
+              text={data.item.text}
+              onPressAction={() => {data.item.onPressAction()}}
+            />
+          }
+          horizontal
+          showsHorizontalScrollIndicator={false}
+        />
+
+        <Text style={styles.transactionSectionHeader}>Transactions</Text>
+        <View style={styles.transactionSection}>
+          { transactions.length === 0 && (
+            <Text style={styles.noTransactionsText}>Nothing to show yet</Text>
+          )}
+          { transactions.reverse().map((transaction) => (
+            <View key={transaction.id} style={{ flexDirection: "row", alignItems: "center", gap: 20 }}>
+              <View style={styles.circle}>
+                <Ionicons name={transaction.amount > 0 ? "add" : "remove"} size={24} />
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ fontWeight: "500" }}>{transaction.title}</Text>
+                <Text style={{ color: Colors.gray, fontSize: 12 }}>{transaction.date.toLocaleString()}</Text>
+              </View>
+              <Text style={{ fontSize: 16 }}>$ {FormatMoney(transaction.amount)}</Text>
+            </View>
+          ))}
+        </View>
+      </ScrollView>
+
+      <BottomSheet show={showBottomSheet} onClose={() => setShowBottomSheet(false)}>
+
+      </BottomSheet>
+    </>
   )
 };
 

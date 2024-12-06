@@ -267,7 +267,7 @@ const styles = StyleSheet.create({
     margin: 8,
     padding: 8,
     borderRadius: 12,
-    backgroundColor: Colors.primary,
+    backgroundColor: Colors.white,
   },
   valueContainer: { 
     flex: 1,
